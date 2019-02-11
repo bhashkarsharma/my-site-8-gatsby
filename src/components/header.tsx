@@ -4,4 +4,6 @@ interface HeaderProp {
   headerText: string
 }
 
-export default (props: HeaderProp) => <h1>{props.headerText}</h1>
+const Header: React.FunctionComponent<HeaderProp> = (props: HeaderProp) => <h1>{props.headerText}</h1>
+
+export default Header

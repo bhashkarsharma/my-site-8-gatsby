@@ -1,6 +1,8 @@
 module.exports = {
   siteMetadata: {
-    siteName: `Bhashkar Sharma`
+    title: "Bhashkar Sharma",
+    author: "Bhashkar Sharma",
+    description: "My personal website - built with Gatsby"
   },
   plugins: [
     `gatsby-plugin-typescript`,

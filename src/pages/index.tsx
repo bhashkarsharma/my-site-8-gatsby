@@ -4,7 +4,7 @@ import { Template } from "../layouts/index"
 
 export default () => (
   <Template>
-    <Header headerText="Hello" />
+    <Header headerText="Hello World" />
     <p>Welcome to the machine</p>
   </Template>
 )

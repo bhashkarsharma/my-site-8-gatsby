@@ -1,3 +1,5 @@
 import React from "react"
 
-export default () => <div>Footer</div>
+const Footer: React.FunctionComponent = () => <div>Footer</div>
+
+export default Footer
