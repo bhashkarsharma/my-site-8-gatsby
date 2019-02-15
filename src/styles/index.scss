@@ -2,5 +2,26 @@
 @import 'vars';
 
 body {
-  background: $white;
+  font-family: $sans;
+  font-size: 18px;
+}
+
+@for $i from 1 through 6 {
+  h#{$i} {
+    font-family: $title;
+    margin: 0.1em 0;
+  }
+}
+
+@for $i from 1 through 12 {
+  .col-#{$i} {
+    width: 100 * #{$i}/ 12%;
+  }
+}
+
+$alignments: left center right;
+@each $alignment in $alignments {
+  .#{$alignment} {
+    text-align: #{$alignment};
+  }
 }
