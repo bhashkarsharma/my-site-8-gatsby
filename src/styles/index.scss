@@ -15,7 +15,7 @@ body {
 
 @for $i from 1 through 12 {
   .col-#{$i} {
-    width: 100 * #{$i}/ 12%;
+    width: #{$i * 100 / 12};
   }
 }
 
@@ -24,4 +24,20 @@ $alignments: left center right;
   .#{$alignment} {
     text-align: #{$alignment};
   }
+}
+
+$fonts: serif sans mono title;
+@each $f in $fonts {
+  .#{$f} {
+    font-family: #{$f};
+  }
+}
+
+.clear {
+  clear: both;
+}
+
+::selection {
+  background: $black;
+  color: $yellow;
 }
