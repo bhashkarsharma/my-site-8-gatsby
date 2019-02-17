@@ -3,7 +3,7 @@ import { Footer } from '~components'
 
 import '../styles/index.scss'
 
-export class Template extends React.Component {
+export class HomeTemplate extends React.Component {
   render() {
     const { children } = this.props
     return (

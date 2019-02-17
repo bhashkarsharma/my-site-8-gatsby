@@ -1,10 +1,10 @@
 import React from 'react'
 import { Header } from '~components'
-import { Template } from '~layouts'
+import { HomeTemplate } from '~layouts'
 
 export default () => (
-  <Template>
+  <HomeTemplate>
     <Header headerText="Hello World" />
     <p>Welcome to the machine</p>
-  </Template>
+  </HomeTemplate>
 )
