@@ -1,6 +1,6 @@
+import { graphql, StaticQuery } from 'gatsby'
 import React from 'react'
 import { Menu } from './menu'
-import { StaticQuery, graphql } from 'gatsby'
 
 interface HeaderProp {
   headerText: string
@@ -11,7 +11,7 @@ const Header: React.FunctionComponent<HeaderProp> = (props: HeaderProp) => (
     <h1>{props.headerText}</h1>
     <StaticQuery
       query={graphql`
-        query MenuQuery {
+        query HeaderQuery {
           allHeaderJson {
             edges {
               node {

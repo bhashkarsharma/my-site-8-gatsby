@@ -1,4 +1,4 @@
-import { StaticQuery, graphql, Link } from 'gatsby'
+import { Link } from 'gatsby'
 import React from 'react'
 
 interface MenuItem {
@@ -18,7 +18,11 @@ const Menu: React.FunctionComponent<MenuProps> = ({ items }) => (
       <ul>
         {items.map((item, key) => (
           <li key={key}>
-            <Link to={item.node.link}>{item.node.label}</Link>
+            {item.node.link.startsWith('/') ? (
+              <Link to={item.node.link}>{item.node.label}</Link>
+            ) : (
+              <a href={item.node.link}>{item.node.label}</a>
+            )}
           </li>
         ))}
       </ul>

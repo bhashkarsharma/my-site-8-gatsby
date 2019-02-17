@@ -12,6 +12,9 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "noEmit": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "~components/*": ["src/components/*"]
+    }
   }
 }
