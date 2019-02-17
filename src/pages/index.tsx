@@ -1,6 +1,6 @@
 import React from 'react'
-import Header from '../components/header'
-import { Template } from '../layouts/index'
+import { Header } from '~components'
+import { Template } from '~layouts'
 
 export default () => (
   <Template>
