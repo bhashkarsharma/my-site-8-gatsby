@@ -4,6 +4,11 @@ $sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Ca
 $mono: 'Courier New', Courier, monospace;
 $title: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 
-$black: #333;
-$white: #fff;
-$yellow: yellow;
+$colors: (
+  black: #333,
+  white: #fff,
+  red: #fb6542,
+  yellow: #ffbb00,
+  green: #3f681c,
+  blue: #375e97
+);

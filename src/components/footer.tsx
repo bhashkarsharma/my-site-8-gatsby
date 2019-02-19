@@ -1,6 +1,12 @@
 import { graphql, StaticQuery } from 'gatsby'
 import React from 'react'
 import { Menu } from './menu'
+import styled from 'styled-components'
+
+const FooterBox = styled.div`
+  background-color: var(--color-blue);
+  padding: 2em;
+`
 
 const Footer: React.FunctionComponent = () => (
   <div>
@@ -17,7 +23,15 @@ const Footer: React.FunctionComponent = () => (
           }
         }
       `}
-      render={(data) => <Menu items={data.allFooterJson.edges} />}
+      render={(data) => (
+        <FooterBox className="row center-xs">
+          <div className="col-xs-6">
+            <div className="box start-xs">
+              <Menu items={data.allFooterJson.edges} />
+            </div>
+          </div>
+        </FooterBox>
+      )}
     />
   </div>
 )

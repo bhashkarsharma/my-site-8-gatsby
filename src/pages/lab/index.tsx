@@ -4,7 +4,6 @@ import { HomeTemplate } from '~layouts'
 
 export default () => (
   <HomeTemplate>
-    <Header headerText="Hello World" />
-    <h1>Lab</h1>
+    <Header headerText="Lab" />
   </HomeTemplate>
 )

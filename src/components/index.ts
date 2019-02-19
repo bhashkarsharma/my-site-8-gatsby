@@ -1,3 +1,5 @@
 export { Footer } from './footer'
 export { Header } from './header'
+export { Logo } from './logo'
 export { Menu } from './menu'
+export { PostPreview } from './post-preview'

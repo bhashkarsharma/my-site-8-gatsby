@@ -1,36 +1,32 @@
+@import 'flexboxgrid';
 @import '~normalize.css';
 @import 'mixins';
 @import 'vars';
 
+:root {
+  @each $name, $value in $colors {
+    --color-#{$name}: #{$value};
+  }
+}
+
 body {
+  background: var(--color-white);
+  color: var(--color-black);
   font-family: $sans;
-  font-size: 18px;
+  font-size: 22px;
+  line-height: 1.4;
 }
 
-@for $i from 1 through 6 {
-  h#{$i} {
-    font-family: $title;
-    margin: 0.1em 0;
-  }
-}
+a {
+  border-bottom: 1px solid transparent;
+  color: var(--color-yellow);
+  text-decoration: none;
+  transition-duration: 0.4s;
+  transition-property: color;
 
-@for $i from 1 through 12 {
-  .col-#{$i} {
-    width: #{$i * 100 / 12};
-  }
-}
-
-$alignments: left center right;
-@each $alignment in $alignments {
-  .#{$alignment} {
-    text-align: #{$alignment};
-  }
-}
-
-$fonts: serif sans mono title;
-@each $f in $fonts {
-  .#{$f} {
-    font-family: #{$f};
+  &:hover {
+    border-bottom: 2px solid var(--color-red);
+    color: var(--color-red);
   }
 }
 
@@ -39,6 +35,12 @@ $fonts: serif sans mono title;
 }
 
 ::selection {
-  background: $black;
-  color: $yellow;
+  background: var(--color-black);
+  color: var(--color-yellow);
+}
+
+blockquote {
+  border-left: 5px solid var(--color-yellow);
+  margin-left: 0;
+  padding-left: 1em;
 }
