@@ -1,11 +1,11 @@
+import { graphql } from 'gatsby'
 import React from 'react'
 import { Header } from '~components'
-import { HomeTemplate } from '~layouts'
-import { graphql } from 'gatsby'
+import { HomeTemplate } from '~templates'
 
 const IndexPage: React.FunctionComponent<any> = (props) => (
   <HomeTemplate>
-    <Header headerText={props.data.site.siteMetadata.title} />
+    <Header headerText={props.data.site.siteMetadata.title} logoSize="50" />
     <div className="row center-xs">
       <div className="col-xs-6">
         <div className="box">
@@ -13,7 +13,6 @@ const IndexPage: React.FunctionComponent<any> = (props) => (
         </div>
       </div>
     </div>
-    {console.log(props)}
   </HomeTemplate>
 )
 

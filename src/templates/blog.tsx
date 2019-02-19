@@ -3,8 +3,7 @@ import React from 'react'
 import Helmet from 'react-helmet'
 import styled from 'styled-components'
 import { Header } from '~components'
-import { HomeTemplate } from '~layouts'
-import '../styles/index.scss'
+import { HomeTemplate } from './home'
 
 const DateBox = styled.p`
   font-size: 0.8em;

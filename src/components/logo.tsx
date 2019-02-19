@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Link } from 'gatsby'
 
 interface LogoProp {
   size: number
@@ -7,14 +8,14 @@ interface LogoProp {
 
 const LogoBox = styled.div`
   display: inline-block;
+  transition: all 0.5s;
 
   .logo-container {
     background: var(--color-black);
     border-radius: 50%;
     color: var(--color-white);
     display: inline-block;
-    padding: 1em;
-    transition: all 0.5s;
+    padding: 4em;
 
     .logo-content {
       position: relative;
@@ -27,7 +28,7 @@ const LogoBox = styled.div`
         width: 50%;
 
         div {
-          border: 4px solid;
+          border: 2px solid;
           box-sizing: border-box;
           height: 25%;
 
@@ -60,27 +61,50 @@ const LogoBox = styled.div`
       }
     }
   }
+
+  &:hover {
+    transform: rotateZ(180deg);
+  }
 `
 
-const Logo: React.FunctionComponent<LogoProp> = (props: LogoProp = { size: 50 }) => (
-  <LogoBox>
-    <div className="logo-container">
-      <div className="logo-content" style={{ height: `${props.size}px`, width: `${props.size}px` }}>
-        <div className="letter">
-          <div />
-          <div />
-          <div />
-          <div />
-        </div>
-        <div className="letter">
-          <div />
-          <div />
-          <div />
-          <div />
-        </div>
-      </div>
-    </div>
-  </LogoBox>
-)
+export class Logo extends React.Component<LogoProp> {
+  state = {
+    size: 50
+  }
 
-export { Logo }
+  componentDidMount() {
+    const { size } = this.props || this.state
+    this.setState({ size })
+  }
+
+  render() {
+    return (
+      <Link to="/">
+        <LogoBox>
+          <div className="logo-container" style={{ fontSize: `${Math.round(this.state.size / 10)}px` }}>
+            <div
+              className="logo-content"
+              style={{
+                height: `${this.state.size}px`,
+                width: `${this.state.size}px`
+              }}
+            >
+              <div className="letter">
+                <div />
+                <div />
+                <div />
+                <div />
+              </div>
+              <div className="letter">
+                <div />
+                <div />
+                <div />
+                <div />
+              </div>
+            </div>
+          </div>
+        </LogoBox>
+      </Link>
+    )
+  }
+}
