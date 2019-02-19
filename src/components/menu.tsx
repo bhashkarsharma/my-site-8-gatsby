@@ -21,7 +21,9 @@ const Menu: React.FunctionComponent<MenuProps> = ({ items }) => (
             {item.node.link.startsWith('/') ? (
               <Link to={item.node.link}>{item.node.label}</Link>
             ) : (
-              <a href={item.node.link}>{item.node.label}</a>
+              <a target="_blank" href={item.node.link}>
+                {item.node.label}
+              </a>
             )}
           </li>
         ))}

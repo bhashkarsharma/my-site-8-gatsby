@@ -7,6 +7,16 @@
   {
     "label": "LinkedIn",
     "class": "fa-linkedin",
-    "link": "https://in.linkedin.com/bhashkarsharma"
+    "link": "https://linkedin.com/in/bhashkarsharma"
+  },
+  {
+    "label": "GitHub",
+    "class": "fa-github",
+    "link": "https://github.com/bhashkarsharma"
+  },
+  {
+    "label": "Email",
+    "class": "fa-envelope",
+    "link": "mailto:info@bhashkar.me"
   }
 ]

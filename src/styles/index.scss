@@ -22,10 +22,9 @@ a {
   color: var(--color-yellow);
   text-decoration: none;
   transition-duration: 0.4s;
-  transition-property: color;
+  transition-property: all;
 
   &:hover {
-    border-bottom: 2px solid var(--color-red);
     color: var(--color-red);
   }
 }
