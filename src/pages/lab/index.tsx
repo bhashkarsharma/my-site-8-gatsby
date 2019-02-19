@@ -1,9 +1,9 @@
 import React from 'react'
 import { Header } from '~components'
-import { HomeTemplate } from '~templates'
+import { BaseTemplate } from '~templates'
 
 export default () => (
-  <HomeTemplate>
+  <BaseTemplate>
     <Header headerText="Lab" />
-  </HomeTemplate>
+  </BaseTemplate>
 )

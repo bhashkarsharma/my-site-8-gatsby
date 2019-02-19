@@ -1,22 +1,22 @@
 [
   {
     "label": "Twitter",
-    "class": "fa-twitter",
+    "class": "fab fa-twitter",
     "link": "https://twitter.com/bhashkarsharma"
   },
   {
     "label": "LinkedIn",
-    "class": "fa-linkedin",
+    "class": "fab fa-linkedin",
     "link": "https://linkedin.com/in/bhashkarsharma"
   },
   {
     "label": "GitHub",
-    "class": "fa-github",
+    "class": "fab fa-github",
     "link": "https://github.com/bhashkarsharma"
   },
   {
     "label": "Email",
-    "class": "fa-envelope",
+    "class": "fas fa-envelope",
     "link": "mailto:info@bhashkar.me"
   }
 ]

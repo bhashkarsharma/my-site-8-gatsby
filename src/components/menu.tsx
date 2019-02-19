@@ -3,6 +3,8 @@ import React from 'react'
 
 interface MenuItem {
   node: {
+    class?: string
+    hover?: string
     label: string
     link: string
   }
@@ -22,7 +24,7 @@ const Menu: React.FunctionComponent<MenuProps> = ({ items }) => (
               <Link to={item.node.link}>{item.node.label}</Link>
             ) : (
               <a target="_blank" href={item.node.link}>
-                {item.node.label}
+                <i className={item.node.class ? item.node.class : ''} />
               </a>
             )}
           </li>

@@ -7,6 +7,16 @@ const FooterBox = styled.div`
   background-color: var(--color-blue);
   color: var(--color-white);
   padding: 2em;
+
+  ul {
+    list-style-type: none;
+
+    li {
+      display: inline-block;
+      font-size: 2em;
+      margin-right: 0.5em;
+    }
+  }
 `
 
 const Footer: React.FunctionComponent = () => (
@@ -17,6 +27,7 @@ const Footer: React.FunctionComponent = () => (
           allFooterJson {
             edges {
               node {
+                class
                 label
                 link
               }

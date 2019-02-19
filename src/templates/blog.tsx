@@ -3,7 +3,7 @@ import React from 'react'
 import Helmet from 'react-helmet'
 import styled from 'styled-components'
 import { Header } from '~components'
-import { HomeTemplate } from './home'
+import { BaseTemplate } from './base'
 
 const DateBox = styled.p`
   font-size: 0.8em;
@@ -15,7 +15,7 @@ export default class BlogTemplate extends React.Component<any> {
     const post = this.props.data.markdownRemark
 
     return (
-      <HomeTemplate>
+      <BaseTemplate>
         <Header headerText={post.frontmatter.title} logoSize="50" />
         <Helmet title={post.frontmatter.title} />
         <div className="row center-xs">
@@ -26,7 +26,7 @@ export default class BlogTemplate extends React.Component<any> {
             </div>
           </div>
         </div>
-      </HomeTemplate>
+      </BaseTemplate>
     )
   }
 }
