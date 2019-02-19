@@ -1,7 +1,11 @@
 @import 'flexboxgrid';
 @import '~normalize.css';
-@import 'mixins';
-@import 'vars';
+@import '../fontawesome/scss/fontawesome.scss';
+@import '../fontawesome/scss/brands.scss';
+@import '../fontawesome/scss/regular.scss';
+@import '../fontawesome/scss/solid.scss';
+@import './mixins';
+@import './vars';
 
 :root {
   @each $name, $value in $colors {
