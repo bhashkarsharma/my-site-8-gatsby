@@ -4,6 +4,10 @@
     "link": "/"
   },
   {
+    "label": "Blog",
+    "link": "/blog"
+  },
+  {
     "label": "Lab",
     "link": "/lab"
   }

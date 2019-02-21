@@ -1,33 +1,86 @@
 import { graphql, StaticQuery } from 'gatsby'
 import React from 'react'
-import { Menu } from './menu'
+import styled from 'styled-components'
 import { Logo } from './logo'
+import { Menu } from './menu'
+import { Link } from 'gatsby'
 
 interface HeaderProp {
   headerText: string
   logoSize: number
 }
 
-const Header: React.FunctionComponent<HeaderProp> = (props: HeaderProp) => (
-  <div>
-    <Logo size={props.logoSize} />
-    <h1>{props.headerText}</h1>
-    <StaticQuery
-      query={graphql`
-        query HeaderQuery {
-          allHeaderJson {
-            edges {
-              node {
-                label
-                link
+interface HeaderState {
+  open: boolean
+}
+
+const HeaderBox = styled.header`
+  background: var(--color-red);
+  color: var(--color-black);
+  padding: 2em 1em;
+
+  i {
+    font-size: 2em;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+`
+
+export class Header extends React.Component<HeaderProp, HeaderState> {
+  constructor(props: HeaderProp) {
+    super(props)
+
+    this.state = {
+      open: false
+    }
+
+    this.onClick = this.onClick.bind(this)
+  }
+
+  onClick(): void {
+    const open = !this.state.open
+    this.setState({ open })
+  }
+
+  render() {
+    const menu = (
+      <StaticQuery
+        query={graphql`
+          query HeaderQuery {
+            allHeaderJson {
+              edges {
+                node {
+                  label
+                  link
+                }
               }
             }
           }
-        }
-      `}
-      render={(data) => <Menu items={data.allHeaderJson.edges} />}
-    />
-  </div>
-)
+        `}
+        render={(data) => <Menu items={data.allHeaderJson.edges} />}
+      />
+    )
 
-export { Header }
+    return (
+      <HeaderBox className="row">
+        <div className="col-xs-6 col-sm-6 col-md-6 col-lg-1">
+          <Link to="/">
+            <Logo size={this.props.logoSize} />
+          </Link>
+        </div>
+        <div className="col-xs-12 col-sm-12 col-md-12 col-lg-10 center-xs last-md last-xs last-sm">
+          <div className="col-md-offset-1 col-md-10">
+            <h1>{this.props.headerText}</h1>
+          </div>
+        </div>
+        <div className="col-xs-6 col-sm-6 col-md-6 col-lg-1 end-xs last-lg">
+          <i className={`fas fa-${this.state.open ? 'times' : 'bars'}`} onClick={this.onClick} />
+          {this.state.open ? menu : null}
+        </div>
+      </HeaderBox>
+    )
+  }
+}

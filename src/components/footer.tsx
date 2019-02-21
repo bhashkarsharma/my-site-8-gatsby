@@ -3,20 +3,25 @@ import React from 'react'
 import { Menu } from './menu'
 import styled from 'styled-components'
 
-const FooterBox = styled.div`
+const FooterBox = styled.footer`
   background-color: var(--color-blue);
   color: var(--color-white);
   padding: 2em;
 
   ul {
     list-style-type: none;
+    padding: 0;
 
     li {
       display: inline-block;
-      font-size: 2em;
-      margin-right: 0.5em;
+      font-size: 2rem;
+      margin-right: 1em;
     }
   }
+`
+
+const CopyBox = styled.div`
+  margin: 2em 0 1em;
 `
 
 const Footer: React.FunctionComponent = () => (
@@ -37,10 +42,10 @@ const Footer: React.FunctionComponent = () => (
       `}
       render={(data) => (
         <FooterBox className="row center-xs">
-          <div className="col-xs-6">
-            <div className="box start-xs">
+          <div className="col-xs-12 col-md-6">
+            <div className="box center-xs">
               <Menu items={data.allFooterJson.edges} />
-              <div>&copy; Bhashkar Sharma </div>
+              <CopyBox>&copy; Bhashkar Sharma</CopyBox>
             </div>
           </div>
         </FooterBox>

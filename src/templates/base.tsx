@@ -8,8 +8,10 @@ export class BaseTemplate extends React.Component {
     const { children } = this.props
     return (
       <>
-        {children}
-        <Footer />
+        <div className="site">
+          <div className="site-content">{children}</div>
+          <Footer />
+        </div>
       </>
     )
   }

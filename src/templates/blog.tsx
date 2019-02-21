@@ -16,10 +16,10 @@ export default class BlogTemplate extends React.Component<any> {
 
     return (
       <BaseTemplate>
-        <Header headerText={post.frontmatter.title} logoSize="50" />
         <Helmet title={post.frontmatter.title} />
+        <Header headerText={post.frontmatter.title} logoSize="25" />
         <div className="row center-xs">
-          <div className="col-xs-6">
+          <div className="col-xs-10 col-sm-8 col-md-8 col-lg-6">
             <div className="box start-xs">
               <DateBox>{post.frontmatter.date}</DateBox>
               <div dangerouslySetInnerHTML={{ __html: post.html }} />
