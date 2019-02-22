@@ -1,9 +1,9 @@
-import { graphql, StaticQuery } from 'gatsby'
+import { graphql, Link, StaticQuery } from 'gatsby'
 import React from 'react'
+import Helmet from 'react-helmet'
 import styled from 'styled-components'
 import { Logo } from './logo'
 import { Menu } from './menu'
-import { Link } from 'gatsby'
 
 interface HeaderProp {
   headerText: string
@@ -46,6 +46,22 @@ export class Header extends React.Component<HeaderProp, HeaderState> {
   }
 
   render() {
+    const titleText: string = this.props.headerText ? `${this.props.headerText} - ` : ''
+    const title = (
+      <StaticQuery
+        query={graphql`
+          query TitleQuery {
+            site {
+              siteMetadata {
+                title
+                description
+              }
+            }
+          }
+        `}
+        render={(data) => <Helmet title={`${titleText}${data.site.siteMetadata.title}`} />}
+      />
+    )
     const menu = (
       <StaticQuery
         query={graphql`
@@ -66,6 +82,7 @@ export class Header extends React.Component<HeaderProp, HeaderState> {
 
     return (
       <HeaderBox className="row">
+        {title}
         <div className="col-xs-6 col-sm-6 col-md-6 col-lg-1">
           <Link to="/">
             <Logo size={this.props.logoSize} />
