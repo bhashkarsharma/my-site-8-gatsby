@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'gatsby'
 import { Tag } from './tag'
+import { Util } from '~util'
 
 interface MarkdownFrontmatter {
   path: string
@@ -15,11 +16,13 @@ interface PostPreviewProps {
     frontmatter: MarkdownFrontmatter
     excerpt: string
   }
+  count: number
 }
 
 const PostBox = styled.div`
-  border: 1px solid;
-  padding: 1em;
+  --shadow-width: 5px;
+  margin-bottom: 4em;
+  padding: 0 1em 1em;
   text-align: left;
 
   .date {
@@ -32,15 +35,24 @@ const PostBox = styled.div`
   }
 `
 
-const PostPreview: React.FunctionComponent<PostPreviewProps> = ({ post }: PostPreviewProps) => (
-  <Link to={post.frontmatter.path}>
-    <PostBox>
-      <h3>{post.frontmatter.title}</h3>
-      <div className="date">{post.frontmatter.date}</div>
-      {post.frontmatter.categories ? <Tag>{post.frontmatter.categories}</Tag> : null}
+const PostPreview: React.FunctionComponent<PostPreviewProps> = ({ post, count }) => {
+  const color = `#${Util.getColorForString(post.frontmatter.categories)}`
+  const odd = count % 2 ? -1 : 1
+
+  return (
+    <PostBox style={{ boxShadow: `calc(${odd} * var(--shadow-width)) var(--shadow-width) ${color}` }}>
+      <Link to={post.frontmatter.path}>
+        <h2 style={{ color }}>{post.frontmatter.title}</h2>
+      </Link>
       <div className="excerpt">{post.excerpt}</div>
+      <div className="date">{post.frontmatter.date}</div>
+      {post.frontmatter.categories ? <Tag style={{ backgroundColor: color }}>{post.frontmatter.categories}</Tag> : null}
     </PostBox>
-  </Link>
-)
+  )
+}
+
+PostPreview.defaultProps = {
+  count: 1
+}
 
 export { PostPreview }

@@ -13,7 +13,19 @@ const DateBox = styled.p`
   font-style: italic;
 `
 
-export default class BlogTemplate extends React.Component<any> {
+interface BlogProps {
+  data: {
+    markdownRemark: {
+      frontmatter: {
+        title: string
+        date: string
+      }
+      html: string
+    }
+  }
+}
+
+export default class BlogTemplate extends React.Component<BlogProps> {
   render() {
     const post = this.props.data.markdownRemark
 

@@ -46,26 +46,16 @@ export class Header extends React.Component<HeaderProp, HeaderState> {
   }
 
   render() {
-    const titleText: string = this.props.headerText ? `${this.props.headerText} - ` : ''
-    const title = (
+    return (
       <StaticQuery
         query={graphql`
-          query TitleQuery {
+          query HeaderQuery {
             site {
               siteMetadata {
                 title
                 description
               }
             }
-          }
-        `}
-        render={(data) => <Helmet title={`${titleText}${data.site.siteMetadata.title}`} />}
-      />
-    )
-    const menu = (
-      <StaticQuery
-        query={graphql`
-          query HeaderQuery {
             allHeaderJson {
               edges {
                 node {
@@ -76,28 +66,28 @@ export class Header extends React.Component<HeaderProp, HeaderState> {
             }
           }
         `}
-        render={(data) => <Menu items={data.allHeaderJson.edges} />}
+        render={(data) => (
+          <HeaderBox className="row">
+            <Helmet
+              title={`${this.props.headerText ? `${this.props.headerText} - ` : ''}${data.site.siteMetadata.title}`}
+            />
+            <div className="col-xs-6 col-sm-6 col-md-6 col-lg-1">
+              <Link to="/">
+                <Logo size={this.props.logoSize} />
+              </Link>
+            </div>
+            <div className="col-xs-12 col-sm-12 col-md-12 col-lg-10 center-xs last-md last-xs last-sm">
+              <div className="col-md-offset-1 col-md-10">
+                <h1>{this.props.headerText}</h1>
+              </div>
+            </div>
+            <div className="col-xs-6 col-sm-6 col-md-6 col-lg-1 end-xs last-lg">
+              <i className={`fas fa-${this.state.open ? 'times' : 'bars'}`} onClick={this.onClick} />
+              {this.state.open ? <Menu items={data.allHeaderJson.edges} /> : null}
+            </div>
+          </HeaderBox>
+        )}
       />
-    )
-
-    return (
-      <HeaderBox className="row">
-        {title}
-        <div className="col-xs-6 col-sm-6 col-md-6 col-lg-1">
-          <Link to="/">
-            <Logo size={this.props.logoSize} />
-          </Link>
-        </div>
-        <div className="col-xs-12 col-sm-12 col-md-12 col-lg-10 center-xs last-md last-xs last-sm">
-          <div className="col-md-offset-1 col-md-10">
-            <h1>{this.props.headerText}</h1>
-          </div>
-        </div>
-        <div className="col-xs-6 col-sm-6 col-md-6 col-lg-1 end-xs last-lg">
-          <i className={`fas fa-${this.state.open ? 'times' : 'bars'}`} onClick={this.onClick} />
-          {this.state.open ? menu : null}
-        </div>
-      </HeaderBox>
     )
   }
 }

@@ -9,7 +9,7 @@ const BlogPage: React.FunctionComponent<any> = ({ data }) => (
     <div className="row center-xs">
       <div className="col-xs-10 col-sm-8 col-md-8 col-lg-6">
         {data.posts.edges.map((edge: any, key: number) => (
-          <PostPreview post={edge.node} key={key} />
+          <PostPreview post={edge.node} count={key} key={key} />
         ))}
       </div>
     </div>

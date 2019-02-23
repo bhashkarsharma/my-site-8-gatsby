@@ -21,6 +21,12 @@ body {
   line-height: 1.5;
 }
 
+@for $i from 1 through 6 {
+  h#{$i} {
+    margin: 0.2em 0;
+  }
+}
+
 a {
   border-bottom: 1px solid transparent;
   color: var(--color-yellow);
@@ -81,4 +87,19 @@ footer {
 
 .hide {
   display: none;
+}
+
+.video-box {
+  height: 0;
+  padding-bottom: 56.25%;
+  padding-top: 25px;
+  position: relative;
+
+  iframe {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
 }

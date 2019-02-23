@@ -5,7 +5,7 @@ import { BaseTemplate } from '~templates'
 
 const IndexPage: React.FunctionComponent<any> = (props) => (
   <BaseTemplate>
-    <Header headerText={props.data.site.siteMetadata.title} logoSize="50" />
+    <Header logoSize="50" />
     <div className="row center-xs">
       <div className="col-xs-6">
         <div className="box">
