@@ -4,11 +4,11 @@ import { BaseTemplate } from '~templates'
 
 const IndexPage: React.FunctionComponent<any> = () => (
   <BaseTemplate>
-    <Header logoSize="50" />
+    <Header headerText="404" logoSize="50" />
     <div className="row center-xs">
       <div className="col-xs-6">
         <div className="box">
-          <p>Welcome to the machine</p>
+          <p>What you seek is not here.</p>
         </div>
       </div>
     </div>

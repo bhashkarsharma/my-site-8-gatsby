@@ -2,6 +2,7 @@ import { graphql } from 'gatsby'
 import React from 'react'
 import styled from 'styled-components'
 import { Header } from '~components'
+import { MarkdownRemark } from '~util'
 import { BaseTemplate } from './base'
 
 const BlogBox = styled.div`
@@ -14,15 +15,7 @@ const DateBox = styled.p`
 `
 
 interface BlogProps {
-  data: {
-    markdownRemark: {
-      frontmatter: {
-        title: string
-        date: string
-      }
-      html: string
-    }
-  }
+  data: MarkdownRemark
 }
 
 export default class BlogTemplate extends React.Component<BlogProps> {
