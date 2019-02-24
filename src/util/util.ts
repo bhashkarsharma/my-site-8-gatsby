@@ -9,7 +9,7 @@ export class Util {
 
   static intToRGB(n: number): string {
     const c = (n & 0x00ffffff).toString(16).toUpperCase()
-    return '000000'.substring(0, 6 - c.length) + c
+    return n ? '#000000'.substring(0, 7 - c.length) + c : 'var(--color-link)'
   }
 
   static getColorForString(str: string): string {

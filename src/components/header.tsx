@@ -15,17 +15,14 @@ interface HeaderState {
 }
 
 const HeaderBox = styled.header`
-  background: var(--color-red);
-  color: var(--color-black);
+  --color-header-bg: var(--color-red);
+  --color-header-text: var(--color-black);
+  background: var(--color-header-bg);
+  color: var(--color-header-text);
   padding: 2em 1em;
 
   i {
     font-size: 2em;
-  }
-
-  ul {
-    list-style-type: none;
-    padding: 0;
   }
 `
 

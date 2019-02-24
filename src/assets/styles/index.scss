@@ -11,31 +11,28 @@
   @each $name, $value in $colors {
     --color-#{$name}: #{$value};
   }
+  --color-bg: var(--color-white);
+  --color-text: var(--color-black);
+  --color-link: var(--color-yellow);
 }
 
 body {
-  background: var(--color-white);
-  color: var(--color-black);
+  background: var(--color-bg);
+  color: var(--color-text);
   font-family: $sans;
   font-size: 22px;
   line-height: 1.5;
 }
 
-@for $i from 1 through 6 {
-  h#{$i} {
-    margin: 0.2em 0;
-  }
-}
-
 a {
   border-bottom: 1px solid transparent;
-  color: var(--color-yellow);
+  color: var(--color-link);
   text-decoration: none;
   transition-duration: 0.4s;
   transition-property: all;
 
   &:hover {
-    color: var(--color-black);
+    color: var(--color-text);
   }
 }
 
@@ -44,8 +41,8 @@ a {
 }
 
 ::selection {
-  background: var(--color-black);
-  color: var(--color-yellow);
+  background: var(--color-text);
+  color: var(--color-link);
 }
 
 blockquote {

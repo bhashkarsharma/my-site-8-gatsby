@@ -26,26 +26,30 @@ const PostBox = styled.div`
   text-align: left;
 
   .date {
-    font-size: 0.8em;
+    font-size: 0.7em;
     font-style: italic;
+    margin-top: 1em;
   }
 
   .excerpt {
-    font-size: 0.8em;
+    color: var(--color-text);
+    font-size: 0.7em;
   }
 `
 
 const PostPreview: React.FunctionComponent<PostPreviewProps> = ({ post, count }) => {
-  const color = `#${Util.getColorForString(post.frontmatter.categories)}`
+  const color = Util.getColorForString(post.frontmatter.categories)
   const odd = count % 2 ? -1 : 1
 
   return (
     <PostBox style={{ boxShadow: `calc(${odd} * var(--shadow-width)) var(--shadow-width) ${color}` }}>
       <Link to={post.frontmatter.path}>
         <h2 style={{ color }}>{post.frontmatter.title}</h2>
+        <div className="excerpt">{post.excerpt}</div>
+        <div className="date" style={{ color }}>
+          {post.frontmatter.date}
+        </div>
       </Link>
-      <div className="excerpt">{post.excerpt}</div>
-      <div className="date">{post.frontmatter.date}</div>
       {post.frontmatter.categories ? <Tag style={{ backgroundColor: color }}>{post.frontmatter.categories}</Tag> : null}
     </PostBox>
   )

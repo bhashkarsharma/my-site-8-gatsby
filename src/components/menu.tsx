@@ -1,5 +1,6 @@
 import { Link } from 'gatsby'
 import React from 'react'
+import styled from 'styled-components'
 
 interface MenuItem {
   node: {
@@ -14,10 +15,15 @@ interface MenuProps {
   items: MenuItem[]
 }
 
+const MenuList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+`
+
 const Menu: React.FunctionComponent<MenuProps> = ({ items }) => (
   <div>
     <nav>
-      <ul>
+      <MenuList>
         {items.map((item, key) => (
           <li key={key}>
             {item.node.link.startsWith('/') ? (
@@ -29,7 +35,7 @@ const Menu: React.FunctionComponent<MenuProps> = ({ items }) => (
             )}
           </li>
         ))}
-      </ul>
+      </MenuList>
     </nav>
   </div>
 )

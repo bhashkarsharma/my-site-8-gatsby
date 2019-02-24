@@ -8,15 +8,10 @@ const FooterBox = styled.footer`
   color: var(--color-white);
   padding: 2em;
 
-  ul {
-    list-style-type: none;
-    padding: 0;
-
-    li {
-      display: inline-block;
-      font-size: 2rem;
-      margin-right: 1em;
-    }
+  li {
+    display: inline-block;
+    font-size: 2rem;
+    margin-right: 1em;
   }
 `
 

@@ -5,7 +5,7 @@ const Tag = styled.div`
   border: 1px solid;
   color: var(--color-white);
   display: inline-block;
-  font-size: 0.5em;
+  font-size: 0.6em;
   padding: 0.2em 0.4em;
 `
 
