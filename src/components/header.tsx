@@ -6,6 +6,7 @@ import { Logo } from './logo'
 import { Menu } from './menu'
 
 interface HeaderProp {
+  backgroundImage?: string
   headerText: string
   logoSize: number
 }
@@ -17,7 +18,7 @@ interface HeaderState {
 const HeaderBox = styled.header`
   --color-header-bg: var(--color-red);
   --color-header-text: var(--color-black);
-  background: var(--color-header-bg);
+  background-color: var(--color-header-bg);
   color: var(--color-header-text);
   padding: 2em 1em;
 

@@ -43,9 +43,13 @@ export const pageQuery = graphql`
     markdownRemark(frontmatter: { path: { eq: $path } }) {
       id
       html
+      timeToRead
       frontmatter {
         title
         date(formatString: "MMMM DD, YYYY")
+        categories
+        image
+        image_credit
       }
     }
   }

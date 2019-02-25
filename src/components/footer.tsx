@@ -8,6 +8,10 @@ const FooterBox = styled.footer`
   color: var(--color-white);
   padding: 2em;
 
+  a:hover {
+    color: var(--color-white);
+  }
+
   li {
     display: inline-block;
     font-size: 2rem;
