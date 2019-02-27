@@ -1,11 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-interface LogoProp {
-  size: number
-}
-
-interface LogoState {
+interface LogoProps {
   size: number
 }
 
@@ -18,9 +14,15 @@ const LogoBox = styled.div`
     border-radius: 50%;
     color: var(--color-white);
     display: inline-block;
+    ${(props: LogoProps) => (props.size ? `padding: ${Math.round(props.size / 50)}em;` : '')}
 
     .logo-content {
       position: relative;
+      ${(props: LogoProps) =>
+        props.size
+          ? `height: ${props.size}px;
+            width: ${props.size}px;`
+          : ''}
 
       .letter {
         box-sizing: border-box;
@@ -70,42 +72,20 @@ const LogoBox = styled.div`
   }
 `
 
-export class Logo extends React.Component<LogoProp, LogoState> {
-  state = {
-    size: 50
-  }
-
-  componentDidMount() {
-    const { size } = this.props || this.state
-    this.setState({ size })
-  }
-
-  render() {
-    return (
-      <LogoBox>
-        <div className="logo-container" style={{ padding: `${Math.round(this.state.size / 50)}em` }}>
-          <div
-            className="logo-content"
-            style={{
-              height: `${this.state.size}px`,
-              width: `${this.state.size}px`
-            }}
-          >
-            <div className="letter">
-              <div />
-              <div />
-              <div />
-              <div />
-            </div>
-            <div className="letter">
-              <div />
-              <div />
-              <div />
-              <div />
-            </div>
+const Logo: React.FunctionComponent<LogoProps> = (props: LogoProps) => (
+  <LogoBox size={props.size}>
+    <div className="logo-container">
+      <div className="logo-content">
+        {Array.from(Array(2).keys()).map((i) => (
+          <div className="letter" key={i}>
+            {Array.from(Array(4).keys()).map((j) => (
+              <div key={j} />
+            ))}
           </div>
-        </div>
-      </LogoBox>
-    )
-  }
-}
+        ))}
+      </div>
+    </div>
+  </LogoBox>
+)
+
+export { Logo }
