@@ -5,9 +5,12 @@ import styled from 'styled-components'
 import { Logo } from './logo'
 import { Menu } from './menu'
 
-interface HeaderProp {
-  backgroundImage?: string
+interface HeaderProps {
+  bgColor?: string
+  bgImage?: string
+  color?: string
   headerText: string
+  byline?: string
   logoSize: number
 }
 
@@ -15,20 +18,27 @@ interface HeaderState {
   open: boolean
 }
 
+interface HeaderBoxProps {
+  bgColor?: string
+  color?: string
+}
+
 const HeaderBox = styled.header`
-  --color-header-bg: var(--color-red);
-  --color-header-text: var(--color-black);
-  background-color: var(--color-header-bg);
-  color: var(--color-header-text);
+  background-color: ${(props: HeaderBoxProps) => (props.bgColor ? props.bgColor : `var(--color-red)`)};
+  color: ${(props: HeaderBoxProps) => (props.color ? props.color : `var(--color-black)`)};
   padding: 2em 1em;
+
+  h1 {
+    text-transform: capitalize;
+  }
 
   i {
     font-size: 2em;
   }
 `
 
-export class Header extends React.Component<HeaderProp, HeaderState> {
-  constructor(props: HeaderProp) {
+export class Header extends React.Component<HeaderProps, HeaderState> {
+  constructor(props: HeaderProps) {
     super(props)
 
     this.state = {
@@ -65,7 +75,7 @@ export class Header extends React.Component<HeaderProp, HeaderState> {
           }
         `}
         render={(data) => (
-          <HeaderBox className="row">
+          <HeaderBox bgColor={this.props.bgColor} color={this.props.color} className="row">
             <Helmet
               title={`${this.props.headerText ? `${this.props.headerText} - ` : ''}${data.site.siteMetadata.title}`}
             />
@@ -77,6 +87,7 @@ export class Header extends React.Component<HeaderProp, HeaderState> {
             <div className="col-xs-12 col-sm-12 col-md-12 col-lg-10 center-xs last-md last-xs last-sm">
               <div className="col-md-offset-1 col-md-10">
                 <h1>{this.props.headerText}</h1>
+                <p>{this.props.byline}</p>
               </div>
             </div>
             <div className="col-xs-6 col-sm-6 col-md-6 col-lg-1 end-xs last-lg">

@@ -2,16 +2,11 @@ import { graphql } from 'gatsby'
 import React from 'react'
 import styled from 'styled-components'
 import { Header } from '~components'
-import { MarkdownRemark } from '~util'
+import { MarkdownRemark, Util } from '~util'
 import { BaseTemplate } from './base'
 
 const BlogBox = styled.div`
   margin: 5em 0;
-`
-
-const DateBox = styled.p`
-  font-size: 0.8em;
-  font-style: italic;
 `
 
 interface BlogProps {
@@ -21,14 +16,21 @@ interface BlogProps {
 export default class BlogTemplate extends React.Component<BlogProps> {
   render() {
     const post = this.props.data.markdownRemark
+    const bgColor = Util.getColorForString(post.frontmatter.categories)
 
     return (
       <BaseTemplate>
-        <Header headerText={post.frontmatter.title} logoSize="25" />
+        <Header
+          headerText={post.frontmatter.title}
+          byline={post.frontmatter.date}
+          bgColor={bgColor}
+          bgImage={post.frontmatter.image}
+          color={Util.getLabelColor(bgColor)}
+          logoSize="25"
+        />
         <BlogBox className="row center-xs">
           <div className="col-xs-10 col-sm-8 col-md-8 col-lg-6">
             <div className="box start-xs">
-              <DateBox>{post.frontmatter.date}</DateBox>
               <div dangerouslySetInnerHTML={{ __html: post.html }} />
             </div>
           </div>

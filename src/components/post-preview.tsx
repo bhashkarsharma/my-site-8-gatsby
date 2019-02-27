@@ -18,10 +18,15 @@ const PostBox = styled.div`
   --shadow-width: 5px;
 
   box-shadow: ${(props: PostBoxProps) =>
-    `calc(${props.odd ? '-1' : '1'} * var(--shadow-width)) var(--shadow-width) ${props.color}`} 
+    `calc(${props.odd ? '-1' : '1'} * var(--shadow-width)) var(--shadow-width) ${props.color};`} 
   margin-bottom: 4em;
   padding: 0 1em 1em;
   text-align: left;
+
+  h2 {
+    color: ${(props: PostBoxProps) => props.color};
+    text-transform: capitalize;
+  }
 
   .date {
     font-size: 0.7em;
@@ -41,7 +46,7 @@ const PostPreview: React.FunctionComponent<PostPreviewProps> = ({ post, count })
   return (
     <PostBox odd={count % 2 == 1} color={color}>
       <Link to={post.frontmatter.path}>
-        <h2 style={{ color }}>{post.frontmatter.title}</h2>
+        <h2>{post.frontmatter.title}</h2>
         <div className="excerpt">{post.excerpt}</div>
         <div className="date" style={{ color }}>
           {post.frontmatter.date}
