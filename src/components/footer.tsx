@@ -17,40 +17,38 @@ const FooterBox = styled.footer`
     font-size: 2rem;
     margin-right: 1em;
   }
-`
 
-const CopyBox = styled.div`
-  margin: 2em 0 1em;
+  .copy {
+    margin: 2em 0 1em;
+  }
 `
 
 const Footer: React.FunctionComponent = () => (
-  <div>
-    <StaticQuery
-      query={graphql`
-        query FooterQuery {
-          allFooterJson {
-            edges {
-              node {
-                class
-                label
-                link
-              }
+  <StaticQuery
+    query={graphql`
+      query FooterQuery {
+        allFooterJson {
+          edges {
+            node {
+              class
+              label
+              link
             }
           }
         }
-      `}
-      render={(data) => (
-        <FooterBox className="row center-xs">
-          <div className="col-xs-12 col-md-6">
-            <div className="box center-xs">
-              <Menu items={data.allFooterJson.edges} />
-              <CopyBox>&copy; Bhashkar Sharma</CopyBox>
-            </div>
+      }
+    `}
+    render={(data) => (
+      <FooterBox className="row center-xs">
+        <div className="col-xs-12 col-md-6">
+          <div className="box center-xs">
+            <Menu items={data.allFooterJson.edges} />
+            <div className="copy">&copy; Bhashkar Sharma</div>
           </div>
-        </FooterBox>
-      )}
-    />
-  </div>
+        </div>
+      </FooterBox>
+    )}
+  />
 )
 
 export { Footer }

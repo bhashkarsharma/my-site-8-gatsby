@@ -1,5 +1,3 @@
-// animation spinning concentric disks with vinyl texture
-
 import React from 'react'
 import styled from 'styled-components'
 
@@ -11,6 +9,7 @@ const VinylBox = styled.div`
 `
 
 const RecordBox = styled.div`
+  border-radius: 50%;
   height: 50vw;
   position: relative;
   width: 50vw;

@@ -2,7 +2,7 @@ import React from 'react'
 import { Header } from '~components'
 import { BaseTemplate } from '~templates'
 
-const IndexPage: React.FunctionComponent<any> = () => (
+const NotFoundPage: React.FunctionComponent = () => (
   <BaseTemplate>
     <Header headerText="404" logoSize="50" />
     <div className="row center-xs">
@@ -15,4 +15,4 @@ const IndexPage: React.FunctionComponent<any> = () => (
   </BaseTemplate>
 )
 
-export default IndexPage
+export default NotFoundPage

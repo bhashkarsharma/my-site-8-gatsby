@@ -28,11 +28,16 @@ const HeaderBox = styled.header`
   color: ${(props: HeaderBoxProps) => (props.color ? props.color : `var(--color-black)`)};
   padding: 2em 1em;
 
+  a {
+    padding: 0.5em;
+  }
+
   h1 {
     text-transform: capitalize;
   }
 
   i {
+    cursor: pointer;
     font-size: 2em;
   }
 `

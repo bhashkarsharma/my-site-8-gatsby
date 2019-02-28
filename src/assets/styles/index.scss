@@ -29,7 +29,7 @@ a {
   color: var(--color-link);
   text-decoration: none;
   transition-duration: 0.4s;
-  transition-property: all;
+  transition-property: color;
 
   &:hover {
     color: var(--color-text);
