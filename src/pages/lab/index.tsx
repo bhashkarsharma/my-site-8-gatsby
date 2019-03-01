@@ -10,7 +10,7 @@ const Lab: React.FunctionComponent<any> = ({ data }) => (
       <div className="col-xs-10 col-sm-8 col-md-8 col-lg-6">
         {data.pages.edges.map(({ node }: any, key: number) => (
           <Link key={key} to={node.path}>
-            {node.internalComponentName}
+            {node.internalComponentName.split('Lab')[1]}
           </Link>
         ))}
       </div>
