@@ -16,6 +16,10 @@ const FooterBox = styled.footer`
     display: inline-block;
     font-size: 2rem;
     margin-right: 1em;
+
+    &:last-child {
+      margin: 0;
+    }
   }
 
   .copy {

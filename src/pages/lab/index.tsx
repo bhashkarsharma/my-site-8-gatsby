@@ -2,6 +2,13 @@ import { graphql, Link } from 'gatsby'
 import React from 'react'
 import { Header } from '~components'
 import { BaseTemplate } from '~templates'
+import styled from 'styled-components'
+
+const LinkBox = styled.span`
+  display: inline-block;
+  font-size: 2em;
+  margin: 0.4em;
+`
 
 const Lab: React.FunctionComponent<any> = ({ data }) => (
   <BaseTemplate>
@@ -9,9 +16,9 @@ const Lab: React.FunctionComponent<any> = ({ data }) => (
     <div className="row center-xs">
       <div className="col-xs-10 col-sm-8 col-md-8 col-lg-6">
         {data.pages.edges.map(({ node }: any, key: number) => (
-          <Link key={key} to={node.path}>
-            {node.internalComponentName.split('Lab')[1]}
-          </Link>
+          <LinkBox key={key}>
+            <Link to={node.path}>{node.internalComponentName.split('Lab')[1]}</Link>
+          </LinkBox>
         ))}
       </div>
     </div>
