@@ -28,6 +28,7 @@ const FaceBox = styled.div`
 const Hand = styled.div`
   background: var(--color-black);
   border: 1px solid;
+  border-color: var(--color-white);
   border-top-left-radius: 1vw;
   border-bottom-left-radius: 1vw;
   height: 1vw;
@@ -40,6 +41,7 @@ const Hand = styled.div`
   &.mask {
     background: var(--color-white);
     border-bottom-left-radius: 0;
+    border-color: var(--color-black);
     left: -0.7vw;
     top: 0.7vw;
     transform: rotateZ(135deg);
@@ -67,7 +69,7 @@ const Face: React.FunctionComponent<FaceProps> = (props) => (
   <FaceBox>
     {Array.from({ length: 6 }, (_, k) => (
       <div className="node" key={k}>
-        {props.isDigital ? <Hand className="mask" /> : ''}
+        {props.isDigital && k % 2 === 0 ? <Hand className="mask" /> : ''}
         <Hand angle={props.isDigital ? PATTERN[props.val][2 * k] * ANGLE : props.hours} />
         <Hand angle={props.isDigital ? PATTERN[props.val][2 * k + 1] * ANGLE : props.minutes} />
       </div>
