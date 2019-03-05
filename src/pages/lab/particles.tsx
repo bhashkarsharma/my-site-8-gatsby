@@ -65,6 +65,7 @@ export default class Particles extends React.Component<ParticlesProps, Particles
     this.canvas = this.refs.canvas
     this.canvas.width = this.canvas.parentElement.clientWidth
     this.canvas.height = window.innerHeight
+    this.canvas.scrollIntoView()
     this.generateParticles()
     this.runningAnim = requestAnimationFrame(() => this.draw())
   }
@@ -188,16 +189,16 @@ export default class Particles extends React.Component<ParticlesProps, Particles
     if (Math.abs(dx) > Math.abs(dy)) {
       percentage = Math.abs(dx / can.width)
       if (startY < can.height / 2) {
-        this.handleParamsChange({ ...this.state, ...{ count: Math.floor(Particles.LIMITS.count * percentage) } })
+        this.handleParamsChange({ ...this.state, ...{ count: Math.ceil(Particles.LIMITS.count * percentage) } })
       } else {
-        this.handleParamsChange({ ...this.state, ...{ maxDist: Math.floor(Particles.LIMITS.maxDist * percentage) } })
+        this.handleParamsChange({ ...this.state, ...{ maxDist: Math.ceil(Particles.LIMITS.maxDist * percentage) } })
       }
     } else {
       percentage = Math.abs(dy / can.height)
       if (startX < can.width / 2) {
-        this.handleParamsChange({ ...this.state, ...{ speed: Math.floor(Particles.LIMITS.speed * percentage) } })
+        this.handleParamsChange({ ...this.state, ...{ speed: Math.ceil(Particles.LIMITS.speed * percentage) } })
       } else {
-        this.handleParamsChange({ ...this.state, ...{ size: Math.floor(Particles.LIMITS.size * percentage) } })
+        this.handleParamsChange({ ...this.state, ...{ size: Math.ceil(Particles.LIMITS.size * percentage) } })
       }
     }
   }
@@ -209,10 +210,11 @@ export default class Particles extends React.Component<ParticlesProps, Particles
   render() {
     return (
       <BaseTemplate>
-        <Header headerText="Particles" byline="Drag around the edges to play" logoSize="25" />
+        <Header headerText="Particles" logoSize="25" />
         <ParticleBox>
           <canvas ref="canvas" onMouseDown={this.handleDrag} onMouseUp={this.handleDrag} />
         </ParticleBox>
+        <div className="row center-xs">Drag around the edges to play. Longer drag equals a higher value.</div>
       </BaseTemplate>
     )
   }
