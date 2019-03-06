@@ -24,7 +24,8 @@ export default class BlogTemplate extends React.Component<BlogProps> {
           headerText={post.frontmatter.title}
           byline={post.frontmatter.date}
           bgColor={bgColor}
-          bgImage={post.frontmatter.image}
+          bgImage={post.frontmatter.image ? post.frontmatter.image.childImageSharp.fluid : null}
+          bgAlt={post.frontmatter.image_credit}
           color={Util.getLabelColor(bgColor)}
           logoSize="25"
         />
@@ -50,7 +51,13 @@ export const pageQuery = graphql`
         title
         date(formatString: "MMMM DD, YYYY")
         categories
-        image
+        image {
+          childImageSharp {
+            fluid(maxWidth: 1200) {
+              ...GatsbyImageSharpFluid_tracedSVG
+            }
+          }
+        }
         image_credit
       }
     }

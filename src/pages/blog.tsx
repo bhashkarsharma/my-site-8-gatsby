@@ -25,7 +25,6 @@ export const pageQuery = graphql`
           frontmatter {
             categories
             date(formatString: "MMMM DD, YYYY")
-            image
             path
             title
           }
