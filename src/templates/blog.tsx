@@ -13,33 +13,33 @@ interface BlogProps {
   data: MarkdownRemark
 }
 
-export default class BlogTemplate extends React.Component<BlogProps> {
-  render() {
-    const post = this.props.data.markdownRemark
-    const bgColor = Util.getColorForString(post.frontmatter.categories)
+const BlogTemplate: React.FunctionComponent<BlogProps> = (props: BlogProps) => {
+  const post = props.data.markdownRemark
+  const bgColor = Util.getColorForString(post.frontmatter.categories)
 
-    return (
-      <BaseTemplate>
-        <Header
-          headerText={post.frontmatter.title}
-          byline={post.frontmatter.date}
-          bgColor={bgColor}
-          bgImage={post.frontmatter.image ? post.frontmatter.image.childImageSharp.fluid : null}
-          bgAlt={post.frontmatter.image_credit}
-          color={Util.getLabelColor(bgColor)}
-          logoSize="25"
-        />
-        <BlogBox className="row center-xs">
-          <div className="col-xs-10 col-sm-8 col-md-8 col-lg-6">
-            <div className="box start-xs">
-              <div dangerouslySetInnerHTML={{ __html: post.html }} />
-            </div>
+  return (
+    <BaseTemplate>
+      <Header
+        headerText={post.frontmatter.title}
+        byline={post.frontmatter.date}
+        bgColor={bgColor}
+        bgImage={post.frontmatter.image ? post.frontmatter.image.childImageSharp.fluid : null}
+        bgAlt={post.frontmatter.image_credit}
+        color={Util.getLabelColor(bgColor)}
+        logoSize="25"
+      />
+      <BlogBox className="row center-xs">
+        <div className="col-xs-10 col-sm-8 col-md-8 col-lg-6">
+          <div className="box start-xs">
+            <div dangerouslySetInnerHTML={{ __html: post.html }} />
           </div>
-        </BlogBox>
-      </BaseTemplate>
-    )
-  }
+        </div>
+      </BlogBox>
+    </BaseTemplate>
+  )
 }
+
+export default BlogTemplate
 
 export const pageQuery = graphql`
   query BlogPostByPath($path: String!) {
