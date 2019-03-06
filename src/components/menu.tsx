@@ -18,6 +18,16 @@ interface MenuProps {
 const MenuList = styled.ul`
   list-style-type: none;
   padding: 0;
+
+  li {
+    display: inline-block;
+    font-size: 2rem;
+    margin-right: 1em;
+
+    &:last-child {
+      margin: 0;
+    }
+  }
 `
 
 const Menu: React.FunctionComponent<MenuProps> = ({ items }) => (

@@ -38,6 +38,7 @@ const HeaderBox = styled.header`
 
   a {
     padding: 0.5em;
+    color: ${(props: HeaderBoxProps) => (props.color ? props.color : `var(--color-black)`)};
   }
 
   h1 {
@@ -66,16 +67,6 @@ const HeaderImg = styled(Img)`
   top: 0;
   width: 100%;
   z-index: -1;
-`
-
-const MenuOverlay = styled.div`
-  background: var(--color-blue);
-  height: 100%;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  z-index: 1;
 `
 
 export class Header extends React.Component<HeaderProps, HeaderState> {
@@ -140,19 +131,20 @@ export class Header extends React.Component<HeaderProps, HeaderState> {
               </div>
               <div className="col-xs-12 col-sm-12 col-md-12 col-lg-10 center-xs last-md last-xs last-sm">
                 <HeaderText color={this.props.color} className="col-md-offset-1 col-md-10">
-                  <h1>{this.props.headerText}</h1>
-                  <p>{this.props.byline}</p>
+                  {this.state.open ? (
+                    <Menu items={data.allHeaderJson.edges} />
+                  ) : (
+                    <>
+                      <h1>{this.props.headerText}</h1>
+                      <p>{this.props.byline}</p>
+                    </>
+                  )}
                 </HeaderText>
               </div>
               <div className="col-xs-6 col-sm-6 col-md-6 col-lg-1 end-xs last-lg">
                 <HeaderText color={this.props.color}>
                   <i className={`fas fa-${this.state.open ? 'times' : 'bars'}`} onClick={this.onClick} />
                 </HeaderText>
-                {this.state.open ? (
-                  <MenuOverlay>
-                    <Menu items={data.allHeaderJson.edges} />
-                  </MenuOverlay>
-                ) : null}
               </div>
             </div>
           </HeaderBox>

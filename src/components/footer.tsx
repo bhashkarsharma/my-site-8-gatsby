@@ -12,16 +12,6 @@ const FooterBox = styled.footer`
     color: var(--color-white);
   }
 
-  li {
-    display: inline-block;
-    font-size: 2rem;
-    margin-right: 1em;
-
-    &:last-child {
-      margin: 0;
-    }
-  }
-
   .copy {
     margin: 2em 0 1em;
   }
