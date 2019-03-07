@@ -8,6 +8,7 @@ before_install:
   - pwd
   - mkdir -p $COPYLOC/src/content/posts
   - cp -r posts/* $COPYLOC/src/content/posts
+  - cd $COPYLOC
 install:
   - pip install --user awscli
 script: npm run build
