@@ -3,11 +3,11 @@ node_js:
   - 8.10
 before_install:
   - COPYLOC=`pwd`
-    - echo $COPYLOC
-    - cd ~ && git clone https://github.com/bhashkarsharma/posts && cd posts
-    - pwd
-    - mkdir -p $COPYLOC/src/content/posts
-    - cp -r posts/* $COPYLOC/public/posts
+  - echo $COPYLOC
+  - cd ~ && git clone https://github.com/bhashkarsharma/posts && cd posts
+  - pwd
+  - mkdir -p $COPYLOC/src/content/posts
+  - cp -r posts/* $COPYLOC/public/posts
 install:
   - pip install --user awscli
 script: npm run build
