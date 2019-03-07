@@ -165,7 +165,6 @@ export default class Particles extends React.Component<ParticlesProps, Particles
   }
 
   private handleDrag(e: any): void {
-    e.persist()
     switch (e.type) {
       case 'mousedown':
         this.setState({ mouseDown: { x: e.clientX, y: e.clientY } })
