@@ -7,7 +7,7 @@ before_install:
   - cd ~ && git clone https://github.com/bhashkarsharma/posts && cd posts
   - pwd
   - mkdir -p $COPYLOC/src/content/posts
-  - cp -r posts/* $COPYLOC/public/posts
+  - cp -r posts/* $COPYLOC/src/content/posts
 install:
   - pip install --user awscli
 script: npm run build
