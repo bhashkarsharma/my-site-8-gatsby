@@ -52,8 +52,10 @@ const HeaderBox = styled.header`
 `
 
 const HeaderText = styled.div`
-  text-shadow: 0 0 10px
-    ${(props: HeaderBoxProps) => (props.color === `var(--color-black)` ? `var(--color-white)` : `var(--color-black)`)};
+  &.shadow {
+    text-shadow: 0 0 10px
+      ${(props: HeaderBoxProps) => (props.color === `var(--color-black)` ? `var(--color-white)` : `var(--color-black)`)};
+  }
 `
 
 const HeaderImg = styled(Img)`
@@ -130,7 +132,10 @@ export class Header extends React.Component<HeaderProps, HeaderState> {
                 </Link>
               </div>
               <div className="col-xs-12 col-sm-12 col-md-12 col-lg-10 center-xs last-md last-xs last-sm">
-                <HeaderText color={this.props.color} className="col-md-offset-1 col-md-10">
+                <HeaderText
+                  color={this.props.color}
+                  className={`col-md-offset-1 col-md-10 ${this.props.bgImage ? 'shadow' : ''}`}
+                >
                   {this.state.open ? (
                     <Menu items={data.allHeaderJson.edges} />
                   ) : (
