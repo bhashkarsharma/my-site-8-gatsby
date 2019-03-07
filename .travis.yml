@@ -11,6 +11,7 @@ before_install:
   - cd $COPYLOC
 install:
   - pip install --user awscli
+  - npm install
 script: npm run build
 deploy:
   provider: s3
