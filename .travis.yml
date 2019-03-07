@@ -1,0 +1,25 @@
+language: node_js
+node_js:
+  - 8.10
+before_install:
+  - COPYLOC=`pwd`
+    - echo $COPYLOC
+    - cd ~ && git clone https://github.com/bhashkarsharma/posts && cd posts
+    - pwd
+    - mkdir -p $COPYLOC/src/content/posts
+    - cp -r posts/* $COPYLOC/public/posts
+install:
+  - pip install --user awscli
+script: npm run build
+deploy:
+  provider: s3
+  access_key_id: $AWS_KEY
+  secret_access_key: $AWS_SECRET
+  bucket: $BUCKET
+  skip_cleanup: true
+  acl: public_read
+  local_dir: public
+  detect_encoding: true
+after_deploy:
+  - aws configure set preview.cloudfront true
+  - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths "/*"
