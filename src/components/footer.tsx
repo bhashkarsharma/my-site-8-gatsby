@@ -5,8 +5,10 @@ import styled from 'styled-components'
 
 const FooterBox = styled.footer`
   background-color: var(--color-blue);
+  clip-path: polygon(0% 10%, 100% 20%, 100% 100%, 0 100%);
   color: var(--color-white);
-  padding: 2em;
+  margin-top: 4em;
+  padding: 4em 2em 2em;
 
   a:hover {
     color: var(--color-white);
@@ -33,11 +35,13 @@ const Footer: React.FunctionComponent = () => (
       }
     `}
     render={(data) => (
-      <FooterBox className="row center-xs">
-        <div className="col-xs-12 col-md-6">
-          <div className="box center-xs">
-            <Menu items={data.allFooterJson.edges} />
-            <div className="copy">&copy; Bhashkar Sharma</div>
+      <FooterBox>
+        <div className="row center-xs">
+          <div className="col-xs-12 col-md-6">
+            <div className="box center-xs">
+              <Menu items={data.allFooterJson.edges} />
+              <div className="copy">&copy; Bhashkar Sharma</div>
+            </div>
           </div>
         </div>
       </FooterBox>
