@@ -211,7 +211,13 @@ export default class Particles extends React.Component<ParticlesProps, Particles
       <BaseTemplate>
         <Header headerText="Particles" logoSize="25" />
         <ParticleBox>
-          <canvas ref="canvas" onMouseDown={this.handleDrag} onMouseUp={this.handleDrag} />
+          <canvas
+            ref="canvas"
+            onMouseDown={this.handleDrag}
+            onMouseUp={this.handleDrag}
+            onTouchStart={this.handleDrag}
+            onTouchEnd={this.handleDrag}
+          />
         </ParticleBox>
         <div className="row center-xs">Drag around the edges to play. Longer drag equals a higher value.</div>
       </BaseTemplate>
