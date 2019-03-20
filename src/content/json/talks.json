@@ -1,0 +1,14 @@
+[
+  {
+    "title": "JAMstack",
+    "html": "<div class='video-box'><iframe width='560' height='315' src='http://jamstack.bhashkar.me' frameborder='0'></iframe></div>"
+  },
+  {
+    "title": "Hybrid apps",
+    "html": "<div class='video-box'><iframe width='560' height='315' src='https://www.youtube.com/embed/oYiSuxPpJTg?ecver=1' frameborder='0' allowfullscreen></iframe></div>"
+  },
+  {
+    "title": "Client-side rendering",
+    "html": "<div class='video-box'><iframe width='560' height='315' src='https://www.youtube.com/embed/F5tG1pZ-g7g?ecver=1' frameborder='0' allowfullscreen></iframe></div>"
+  }
+]

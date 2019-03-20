@@ -3,12 +3,17 @@
     "label": "Home",
     "link": "/"
   },
+
+  {
+    "label": "Lab",
+    "link": "/lab"
+  },
   {
     "label": "Blog",
     "link": "/blog"
   },
   {
-    "label": "Lab",
-    "link": "/lab"
+    "label": "Talks",
+    "link": "/talks"
   }
 ]
