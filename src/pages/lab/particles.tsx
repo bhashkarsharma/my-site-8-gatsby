@@ -20,6 +20,11 @@ interface ParticlesParams {
   maxDist: number
 }
 
+enum UserEvent {
+  START = 0,
+  END = 1
+}
+
 interface ParticlesState extends ParticlesParams {
   particles: Particle[]
   mouseDown?: { x: number; y: number }
@@ -165,18 +170,41 @@ export default class Particles extends React.Component<ParticlesProps, Particles
   }
 
   private handleDrag(e: any): void {
+    let eventType = UserEvent.START
+    let touch: any
+    let eventX = 0
+    let eventY = 0
     switch (e.type) {
       case 'mousedown':
-        this.setState({ mouseDown: { x: e.clientX, y: e.clientY } })
+        eventX = e.clientX
+        eventY = e.clientY
+        eventType = UserEvent.START
+        break
+      case 'touchstart':
+        touch = e.touches[0]
+        eventX = touch.clientX
+        eventY = touch.clientY
+        eventType = UserEvent.START
         break
       case 'mouseup':
-        const mouseDown = this.state.mouseDown || { x: 0, y: 0 }
-        const { x: startX, y: startY } = mouseDown
-        const endX = e.clientX
-        const endY = e.clientY
-        this.onDragComplete(startX, startY, endX, endY)
-        this.setState({ mouseDown: undefined })
+        eventX = e.clientX
+        eventY = e.clientY
+        eventType = UserEvent.END
         break
+      case 'touchend':
+        touch = e.changedTouches[0]
+        eventX = touch.clientX
+        eventY = touch.clientY
+        eventType = UserEvent.END
+        break
+    }
+    if (eventType === UserEvent.START) {
+      this.setState({ mouseDown: { x: eventX, y: eventY } })
+    } else {
+      const mouseDown = this.state.mouseDown || { x: 0, y: 0 }
+      const { x: startX, y: startY } = mouseDown
+      this.onDragComplete(startX, startY, eventX, eventY)
+      this.setState({ mouseDown: undefined })
     }
   }
 
