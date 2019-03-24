@@ -2,11 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import { Header } from '~components'
 import { BaseTemplate } from '~templates'
-import { Util } from '~util'
+import { Point, Util } from '~util'
 
-interface Particle {
-  x: number
-  y: number
+interface Particle extends Point {
   dx: number
   dy: number
 }
@@ -80,7 +78,7 @@ export default class Particles extends React.Component<ParticlesProps, Particles
   }
 
   private generateParticles(): void {
-    const particles = []
+    const particles: Particle[] = []
     const dist = this.state.size * 2
     for (let i = 0; i < this.state.count; i++) {
       particles.push({
@@ -171,33 +169,21 @@ export default class Particles extends React.Component<ParticlesProps, Particles
 
   private handleDrag(e: any): void {
     let eventType = UserEvent.START
-    let touch: any
-    let eventX = 0
-    let eventY = 0
+    let touch = e
     switch (e.type) {
-      case 'mousedown':
-        eventX = e.clientX
-        eventY = e.clientY
-        eventType = UserEvent.START
-        break
       case 'touchstart':
         touch = e.touches[0]
-        eventX = touch.clientX
-        eventY = touch.clientY
+      case 'mousedown':
         eventType = UserEvent.START
-        break
-      case 'mouseup':
-        eventX = e.clientX
-        eventY = e.clientY
-        eventType = UserEvent.END
         break
       case 'touchend':
         touch = e.changedTouches[0]
-        eventX = touch.clientX
-        eventY = touch.clientY
+      case 'mouseup':
         eventType = UserEvent.END
         break
     }
+    const eventX = touch.clientX
+    const eventY = touch.clientY
     if (eventType === UserEvent.START) {
       this.setState({ mouseDown: { x: eventX, y: eventY } })
     } else {
@@ -210,28 +196,25 @@ export default class Particles extends React.Component<ParticlesProps, Particles
 
   private onDragComplete(startX: number, startY: number, endX: number, endY: number): void {
     const can = this.canvas
-    const dx = endX - startX
-    const dy = endY - startY
-    let percentage = 0
-    if (Math.abs(dx) > Math.abs(dy)) {
-      percentage = Math.abs(dx / can.width)
+    const swipe = Util.getSwipe({ x: startX, y: startY }, { x: endX, y: endY })
+    let percentage = 1
+    let stageDelta: any = {}
+    if (swipe.x) {
+      percentage = Math.abs(swipe.x / can.width)
       if (startY < can.height / 2) {
-        this.handleParamsChange({ ...this.state, ...{ count: Math.ceil(Particles.LIMITS.count * percentage) } })
+        stageDelta = { count: Math.ceil(Particles.LIMITS.count * percentage) }
       } else {
-        this.handleParamsChange({ ...this.state, ...{ maxDist: Math.ceil(Particles.LIMITS.maxDist * percentage) } })
+        stageDelta = { maxDist: Math.ceil(Particles.LIMITS.maxDist * percentage) }
       }
     } else {
-      percentage = Math.abs(dy / can.height)
+      percentage = Math.abs(swipe.y / can.height)
       if (startX < can.width / 2) {
-        this.handleParamsChange({ ...this.state, ...{ speed: Math.ceil(Particles.LIMITS.speed * percentage) } })
+        stageDelta = { speed: Math.ceil(Particles.LIMITS.speed * percentage) }
       } else {
-        this.handleParamsChange({ ...this.state, ...{ size: Math.ceil(Particles.LIMITS.size * percentage) } })
+        stageDelta = { size: Math.ceil(Particles.LIMITS.size * percentage) }
       }
     }
-  }
-
-  private handleParamsChange(params: ParticlesParams): void {
-    this.setState(params, () => this.handleResize())
+    this.setState({ ...this.state, ...stageDelta }, () => this.handleResize())
   }
 
   render() {

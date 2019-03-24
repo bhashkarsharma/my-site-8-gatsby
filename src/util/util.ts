@@ -1,3 +1,5 @@
+import { Point } from './types'
+
 export class Util {
   /**
    * Generate hash for the string
@@ -51,5 +53,22 @@ export class Util {
       min = 0
     }
     return min + Math.floor(Math.random() * (max - min))
+  }
+
+  /**
+   * Returns the swipe distance for the axis with more movement
+   * @param start starting point
+   * @param end ending point
+   */
+  static getSwipe(start: Point, end: Point): Point {
+    const { x: startX, y: startY } = start
+    const { x: endX, y: endY } = end
+    const dx = endX - startX
+    const dy = endY - startY
+    if (Math.abs(dx) > Math.abs(dy)) {
+      return { x: dx, y: 0 }
+    } else {
+      return { x: 0, y: dy }
+    }
   }
 }

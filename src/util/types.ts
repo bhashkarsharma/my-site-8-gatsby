@@ -24,3 +24,8 @@ export interface MarkdownRemark {
   html?: string
   wordCount?: WordCount
 }
+
+export interface Point {
+  x: number
+  y: number
+}
