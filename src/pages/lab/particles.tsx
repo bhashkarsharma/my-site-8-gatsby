@@ -31,6 +31,8 @@ const ParticleBox = styled.div`
 `
 
 export default class Particles extends React.Component<ParticlesProps, ParticlesState> {
+  private static readonly MIN_SWIPE_LENGTH = 25
+  private static readonly SWIPE_AREA_WIDTH = 200
   private static readonly COLOR = 'rgb(0,0,0)'
   private static readonly LIMITS: ParticlesParams = {
     count: 200,
@@ -168,33 +170,38 @@ export default class Particles extends React.Component<ParticlesProps, Particles
       this.lastEvent = point
     } else {
       const mouseDown = this.lastEvent || { x: 0, y: 0 }
-      const { x: startX, y: startY } = mouseDown
-      this.onDragComplete(startX, startY, point.x, point.y)
+      this.onDragComplete(mouseDown, point)
       this.lastEvent = null
     }
   }
 
-  private onDragComplete(startX: number, startY: number, endX: number, endY: number): void {
+  private onDragComplete(start: Point, end: Point): void {
     const can = this.canvas
-    const swipe = Util.getSwipe({ x: startX, y: startY }, { x: endX, y: endY })
+    const swipe = Util.getSwipe(start, end)
+
     let percentage = 0.1
     let stageDelta: any = {}
-    if (swipe.x) {
+
+    if (Math.abs(swipe.x) > Particles.MIN_SWIPE_LENGTH) {
       percentage = Math.abs(swipe.x / can.width) || percentage
-      if (startY < can.height / 2) {
+
+      if (start.y < Particles.SWIPE_AREA_WIDTH) {
         stageDelta = { count: Math.ceil(Particles.LIMITS.count * percentage) }
-      } else {
+      } else if (start.y > can.height - Particles.SWIPE_AREA_WIDTH) {
         stageDelta = { maxDist: Math.ceil(Particles.LIMITS.maxDist * percentage) }
       }
-    } else {
+    } else if (Math.abs(swipe.y) > Particles.MIN_SWIPE_LENGTH) {
       percentage = Math.abs(swipe.y / can.height) || percentage
-      if (startX < can.width / 2) {
+
+      if (start.x < Particles.SWIPE_AREA_WIDTH) {
         stageDelta = { speed: Math.ceil(Particles.LIMITS.speed * percentage) }
-      } else {
+      } else if (start.x > can.width - Particles.SWIPE_AREA_WIDTH) {
         stageDelta = { size: Math.ceil(Particles.LIMITS.size * percentage) }
       }
     }
-    this.setState({ ...this.state, ...stageDelta }, () => this.handleResize())
+    if (Object.entries(stageDelta).length) {
+      this.setState({ ...this.state, ...stageDelta }, () => this.handleResize())
+    }
   }
 
   render() {
