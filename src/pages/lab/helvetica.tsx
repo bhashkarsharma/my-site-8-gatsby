@@ -1,6 +1,6 @@
 import React from 'react'
 import { Header } from '~components'
-import { BaseTemplate } from '~templates'
+import { LabTemplate } from '~templates'
 import styled from 'styled-components'
 
 const HelveticaBox = styled.div`
@@ -163,7 +163,7 @@ export default class Helvetica extends React.Component<HelveticaProps, Helvetica
 
   render() {
     return (
-      <BaseTemplate>
+      <LabTemplate>
         <Header headerText="Helvetica" byline="You've never seen time like this" logoSize="25" />
         <div className="row center-xs">
           <HelveticaBox className="col-xs-10 col-sm-8 col-md-8 col-lg-6">
@@ -178,7 +178,7 @@ export default class Helvetica extends React.Component<HelveticaProps, Helvetica
             ))}
           </HelveticaBox>
         </div>
-      </BaseTemplate>
+      </LabTemplate>
     )
   }
 }

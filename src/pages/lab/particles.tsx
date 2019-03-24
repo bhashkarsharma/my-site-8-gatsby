@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Header } from '~components'
-import { BaseTemplate } from '~templates'
+import { LabTemplate } from '~templates'
 import { Point, UserEvent, Util } from '~util'
 
 interface Particle extends Point {
@@ -206,7 +206,7 @@ export default class Particles extends React.Component<ParticlesProps, Particles
 
   render() {
     return (
-      <BaseTemplate>
+      <LabTemplate>
         <Header headerText="Particles" logoSize="25" />
         <ParticleBox>
           <canvas
@@ -218,7 +218,7 @@ export default class Particles extends React.Component<ParticlesProps, Particles
           />
         </ParticleBox>
         <div className="row center-xs">Drag around the edges to play. Longer drag equals a higher value.</div>
-      </BaseTemplate>
+      </LabTemplate>
     )
   }
 }
