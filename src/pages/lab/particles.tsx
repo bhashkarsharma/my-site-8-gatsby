@@ -197,17 +197,17 @@ export default class Particles extends React.Component<ParticlesProps, Particles
   private onDragComplete(startX: number, startY: number, endX: number, endY: number): void {
     const can = this.canvas
     const swipe = Util.getSwipe({ x: startX, y: startY }, { x: endX, y: endY })
-    let percentage = 1
+    let percentage = 0.1
     let stageDelta: any = {}
     if (swipe.x) {
-      percentage = Math.abs(swipe.x / can.width)
+      percentage = Math.abs(swipe.x / can.width) || percentage
       if (startY < can.height / 2) {
         stageDelta = { count: Math.ceil(Particles.LIMITS.count * percentage) }
       } else {
         stageDelta = { maxDist: Math.ceil(Particles.LIMITS.maxDist * percentage) }
       }
     } else {
-      percentage = Math.abs(swipe.y / can.height)
+      percentage = Math.abs(swipe.y / can.height) || percentage
       if (startX < can.width / 2) {
         stageDelta = { speed: Math.ceil(Particles.LIMITS.speed * percentage) }
       } else {
