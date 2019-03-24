@@ -20,7 +20,6 @@ interface ParticlesParams {
 
 interface ParticlesState extends ParticlesParams {
   particles: Particle[]
-  mouseDown?: { x: number; y: number }
 }
 
 const ParticleBox = styled.div`
@@ -39,6 +38,7 @@ export default class Particles extends React.Component<ParticlesProps, Particles
     size: 100,
     maxDist: 1000
   }
+  private lastEvent: Point
   canvas: any
   runningAnim = 0
 
@@ -165,12 +165,12 @@ export default class Particles extends React.Component<ParticlesProps, Particles
   private handleDrag(e: any): void {
     const { point, event } = Util.normalizeMouseTouchEvents(e)
     if (event === UserEvent.START) {
-      this.setState({ mouseDown: point })
+      this.lastEvent = point
     } else {
-      const mouseDown = this.state.mouseDown || { x: 0, y: 0 }
+      const mouseDown = this.lastEvent || { x: 0, y: 0 }
       const { x: startX, y: startY } = mouseDown
       this.onDragComplete(startX, startY, point.x, point.y)
-      this.setState({ mouseDown: undefined })
+      this.lastEvent = null
     }
   }
 

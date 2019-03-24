@@ -72,17 +72,21 @@ export class Util {
     }
   }
 
-  static normalizeMouseTouchEvents(e: React.MouseEvent & React.TouchEvent): { point: Point; event: UserEvent } {
+  /**
+   * Normalizes mouse and touch events and returns the coordinates (relative to the client), and the event type
+   * @param event raised by React
+   */
+  static normalizeMouseTouchEvents(event: React.MouseEvent & React.TouchEvent): { point: Point; event: UserEvent } {
     let eventType = UserEvent.START
-    let touch: any = e
-    switch (e.type) {
+    let touch: any = event
+    switch (event.type) {
       case 'touchstart':
-        touch = e.touches[0]
+        touch = event.touches[0]
       case 'mousedown':
         eventType = UserEvent.START
         break
       case 'touchend':
-        touch = e.changedTouches[0]
+        touch = event.changedTouches[0]
       case 'mouseup':
         eventType = UserEvent.END
         break
