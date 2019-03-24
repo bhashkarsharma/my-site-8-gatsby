@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Header } from '~components'
 import { BaseTemplate } from '~templates'
-import { Point, Util } from '~util'
+import { Point, UserEvent, Util } from '~util'
 
 interface Particle extends Point {
   dx: number
@@ -16,11 +16,6 @@ interface ParticlesParams {
   speed: number
   size: number
   maxDist: number
-}
-
-enum UserEvent {
-  START = 0,
-  END = 1
 }
 
 interface ParticlesState extends ParticlesParams {
@@ -168,28 +163,13 @@ export default class Particles extends React.Component<ParticlesProps, Particles
   }
 
   private handleDrag(e: any): void {
-    let eventType = UserEvent.START
-    let touch = e
-    switch (e.type) {
-      case 'touchstart':
-        touch = e.touches[0]
-      case 'mousedown':
-        eventType = UserEvent.START
-        break
-      case 'touchend':
-        touch = e.changedTouches[0]
-      case 'mouseup':
-        eventType = UserEvent.END
-        break
-    }
-    const eventX = touch.clientX
-    const eventY = touch.clientY
-    if (eventType === UserEvent.START) {
-      this.setState({ mouseDown: { x: eventX, y: eventY } })
+    const { point, event } = Util.normalizeMouseTouchEvents(e)
+    if (event === UserEvent.START) {
+      this.setState({ mouseDown: point })
     } else {
       const mouseDown = this.state.mouseDown || { x: 0, y: 0 }
       const { x: startX, y: startY } = mouseDown
-      this.onDragComplete(startX, startY, eventX, eventY)
+      this.onDragComplete(startX, startY, point.x, point.y)
       this.setState({ mouseDown: undefined })
     }
   }

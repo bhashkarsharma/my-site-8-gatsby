@@ -29,3 +29,8 @@ export interface Point {
   x: number
   y: number
 }
+
+export enum UserEvent {
+  START,
+  END
+}

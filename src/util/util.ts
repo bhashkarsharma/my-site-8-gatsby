@@ -1,4 +1,4 @@
-import { Point } from './types'
+import { Point, UserEvent } from './types'
 
 export class Util {
   /**
@@ -70,5 +70,23 @@ export class Util {
     } else {
       return { x: 0, y: dy }
     }
+  }
+
+  static normalizeMouseTouchEvents(e: React.MouseEvent & React.TouchEvent): { point: Point; event: UserEvent } {
+    let eventType = UserEvent.START
+    let touch: any = e
+    switch (e.type) {
+      case 'touchstart':
+        touch = e.touches[0]
+      case 'mousedown':
+        eventType = UserEvent.START
+        break
+      case 'touchend':
+        touch = e.changedTouches[0]
+      case 'mouseup':
+        eventType = UserEvent.END
+        break
+    }
+    return { point: { x: touch.clientX, y: touch.clientY }, event: eventType }
   }
 }
