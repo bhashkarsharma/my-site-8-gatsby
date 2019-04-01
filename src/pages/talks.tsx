@@ -5,7 +5,7 @@ import { BaseTemplate } from '~templates'
 
 const TalksPage: React.FunctionComponent<any> = ({ data }) => (
   <BaseTemplate>
-    <Header headerText="Talks" logoSize="50" />
+    <Header headerText="Talks" logoSize="25" />
     <div className="row center-xs">
       <div className="col-xs-8">
         <div className="box">

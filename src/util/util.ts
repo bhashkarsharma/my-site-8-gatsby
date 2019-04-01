@@ -56,7 +56,7 @@ export class Util {
   }
 
   /**
-   * Returns the swipe distance for the axis with more movement
+   * Returns the swipe distance for the axis with higher movement
    * @param start starting point
    * @param end ending point
    */
@@ -73,7 +73,8 @@ export class Util {
   }
 
   /**
-   * Normalizes mouse and touch events and returns the coordinates (relative to the client), and the event type
+   * Normalizes mouse and touch events and returns
+   * the coordinates (relative to the client), and the event type
    * @param event raised by React
    */
   static normalizeMouseTouchEvents(event: React.MouseEvent & React.TouchEvent): { point: Point; event: UserEvent } {
