@@ -1,11 +1,11 @@
+import { Header, PostPreview } from '@components/index'
+import { BaseTemplate } from '@templates/base'
 import { graphql } from 'gatsby'
 import React from 'react'
-import { Header, PostPreview } from '@components'
-import { BaseTemplate } from '@templates'
 
 const BlogPage: React.FunctionComponent<any> = ({ data }) => (
   <BaseTemplate>
-    <Header headerText="Blog" logoSize="25" />
+    <Header headerText="Blog" logoSize={25} />
     <div className="row center-xs">
       <div className="col-xs-10 col-sm-8 col-md-8 col-lg-6">
         {data.posts.edges.map((edge: any, key: number) => (

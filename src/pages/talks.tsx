@@ -1,11 +1,11 @@
+import { Header } from '@components/header'
+import { BaseTemplate } from '@templates/base'
 import { graphql } from 'gatsby'
 import React from 'react'
-import { Header } from '@components'
-import { BaseTemplate } from '@templates'
 
 const TalksPage: React.FunctionComponent<any> = ({ data }) => (
   <BaseTemplate>
-    <Header headerText="Talks" logoSize="25" />
+    <Header headerText="Talks" logoSize={25} />
     <div className="row center-xs">
       <div className="col-xs-8">
         <div className="box">

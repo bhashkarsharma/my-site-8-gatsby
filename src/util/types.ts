@@ -1,3 +1,5 @@
+import { FluidObject } from 'gatsby-image'
+
 export interface MarkdownFrontmatter {
   title?: string
   path: string
@@ -6,7 +8,11 @@ export interface MarkdownFrontmatter {
   tags?: string
   categories?: string
   comments?: string
-  image?: string
+  image?: {
+    childImageSharp: {
+      fluid: FluidObject
+    }
+  }
   image_credit?: string
 }
 

@@ -1,6 +1,5 @@
+import { Footer } from '@components/footer'
 import React from 'react'
-import { Footer } from '@components'
-
 import '../assets/styles/index.scss'
 
 const BaseTemplate: React.FunctionComponent = (props) => (

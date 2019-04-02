@@ -1,4 +1,4 @@
-import { BrickGame } from '@util'
+import { BrickGame } from '@util/brick'
 
 export class Wall {
   constructor() {}

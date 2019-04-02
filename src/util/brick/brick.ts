@@ -1,5 +1,5 @@
-import { BrickAnimation } from './brick-animations'
 import { Point } from '../types'
+import { BrickAnimation } from './brick-animations'
 import { BrickCharMap } from './brick-char-map'
 
 export class BrickGame {
@@ -89,7 +89,6 @@ export class BrickGame {
   getPatternForString(str: string, startX = 0, startY = 0, spacing = 2): Point[][] {
     let offsetX = startX
     const pattern = str
-      .toString()
       .toLowerCase()
       .split('')
       .map((char: string) => {

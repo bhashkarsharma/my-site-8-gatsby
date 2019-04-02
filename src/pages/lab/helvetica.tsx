@@ -1,6 +1,6 @@
+import { Header } from '@components/header'
+import { LabTemplate } from '@templates/lab'
 import React from 'react'
-import { Header } from '@components'
-import { LabTemplate } from '@templates'
 import styled from 'styled-components'
 
 const HelveticaBox = styled.div`
@@ -164,7 +164,7 @@ export default class Helvetica extends React.Component<HelveticaProps, Helvetica
   render() {
     return (
       <LabTemplate>
-        <Header headerText="Helvetica" byline="You've never seen time like this" logoSize="25" />
+        <Header headerText="Helvetica" byline="You've never seen time like this" logoSize={25} />
         <div className="row center-xs">
           <HelveticaBox className="col-xs-10 col-sm-8 col-md-8 col-lg-6">
             {Helvetica.ARRANGEMENT.map((row, rowKey) => (

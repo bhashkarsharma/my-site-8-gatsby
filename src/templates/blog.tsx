@@ -1,8 +1,8 @@
+import { Header } from '@components/header'
+import { MarkdownRemark, Util } from '@util/index'
 import { graphql } from 'gatsby'
 import React from 'react'
 import styled from 'styled-components'
-import { Header } from '@components'
-import { MarkdownRemark, Util } from '@util'
 import { BaseTemplate } from './base'
 
 const BlogBox = styled.div`
@@ -10,28 +10,28 @@ const BlogBox = styled.div`
 `
 
 interface BlogProps {
-  data: MarkdownRemark
+  data: { markdownRemark: MarkdownRemark }
 }
 
 const BlogTemplate: React.FunctionComponent<BlogProps> = (props: BlogProps) => {
   const post = props.data.markdownRemark
-  const bgColor = Util.getColorForString(post.frontmatter.categories)
+  const bgColor = Util.getColorForString(post.frontmatter.categories || '')
 
   return (
     <BaseTemplate>
       <Header
-        headerText={post.frontmatter.title}
+        headerText={post.frontmatter.title || ''}
         byline={post.frontmatter.date}
         bgColor={bgColor}
-        bgImage={post.frontmatter.image ? post.frontmatter.image.childImageSharp.fluid : null}
+        bgImage={post.frontmatter.image ? post.frontmatter.image.childImageSharp.fluid : undefined}
         bgAlt={post.frontmatter.image_credit}
         color={Util.getLabelColor(bgColor)}
-        logoSize="25"
+        logoSize={25}
       />
       <BlogBox className="row center-xs">
         <div className="col-xs-10 col-sm-8 col-md-8 col-lg-6">
           <div className="box start-xs">
-            <div dangerouslySetInnerHTML={{ __html: post.html }} />
+            <div dangerouslySetInnerHTML={{ __html: post.html || '' }} />
           </div>
         </div>
       </BlogBox>

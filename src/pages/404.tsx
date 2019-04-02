@@ -1,10 +1,10 @@
+import { Header } from '@components/header'
+import { BaseTemplate } from '@templates/base'
 import React from 'react'
-import { Header } from '@components'
-import { BaseTemplate } from '@templates'
 
 const NotFoundPage: React.FunctionComponent = () => (
   <BaseTemplate>
-    <Header headerText="404" logoSize="50" />
+    <Header headerText="404" logoSize={50} />
     <div className="row center-xs">
       <div className="col-xs-6">
         <div className="box">

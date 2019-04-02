@@ -1,7 +1,7 @@
 import { graphql, StaticQuery } from 'gatsby'
 import React from 'react'
-import { Menu } from './menu'
 import styled from 'styled-components'
+import { Menu } from './menu'
 
 const FooterBox = styled.footer`
   background-color: var(--color-blue);

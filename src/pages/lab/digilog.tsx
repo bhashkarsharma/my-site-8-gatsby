@@ -1,8 +1,8 @@
+import { Header } from '@components/header'
+import { Face } from '@components/lab'
+import { LabTemplate } from '@templates/lab'
 import React from 'react'
 import styled from 'styled-components'
-import { Header } from '@components'
-import { Face } from '@components/lab'
-import { LabTemplate } from '@templates'
 
 interface DigilogProps {}
 
@@ -76,7 +76,7 @@ export default class Digilog extends React.Component<DigilogProps, DigilogState>
   render() {
     return (
       <LabTemplate>
-        <Header headerText="Digilog" logoSize="25" />
+        <Header headerText="Digilog" logoSize={25} />
         <DigilogBox onClick={this.switchMode.bind(this)}>
           {this.state.time.map((digit, key) => (
             <Face

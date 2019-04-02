@@ -1,4 +1,4 @@
-import { MarkdownRemark, Util } from '@util'
+import { MarkdownRemark, Util } from '@util/index'
 import { Link } from 'gatsby'
 import React from 'react'
 import styled from 'styled-components'
@@ -41,7 +41,7 @@ const PostBox = styled.div`
 `
 
 const PostPreview: React.FunctionComponent<PostPreviewProps> = ({ post, count }) => {
-  const color = Util.getColorForString(post.frontmatter.categories)
+  const color = Util.getColorForString(post.frontmatter.categories || '')
 
   return (
     <PostBox odd={count % 2 == 1} color={color}>

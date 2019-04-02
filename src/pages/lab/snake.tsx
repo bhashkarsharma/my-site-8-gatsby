@@ -1,7 +1,7 @@
-import { Header } from '@components'
+import { Header } from '@components/header'
 import { Direction, Food, Snake, Wall } from '@components/lab'
-import { LabTemplate } from '@templates'
-import { BrickAnimationGallery, BrickGame, Point, UserEvent, Util } from '@util'
+import { LabTemplate } from '@templates/lab'
+import { BrickAnimationGallery, BrickGame, Point, UserEvent, Util } from '@util/index'
 import React from 'react'
 
 interface SnakeGameProps {}
@@ -23,7 +23,7 @@ export default class SnakeGame extends React.Component<SnakeGameProps, SnakeGame
   private static readonly DEFAULT_RES = 25
   private static readonly MAX_SIZE = 30
   private static readonly MIN_SIZE = 10
-  private lastEvent: Point
+  private lastEvent: Point | null
   private brickSize = 25
   private rows = 0
   private cols = 0
@@ -32,6 +32,7 @@ export default class SnakeGame extends React.Component<SnakeGameProps, SnakeGame
 
   constructor(props: SnakeGameProps) {
     super(props)
+    this.lastEvent = null
     this.canvas = this.refs.canvas
     this.state = {
       started: false,
@@ -176,7 +177,7 @@ export default class SnakeGame extends React.Component<SnakeGameProps, SnakeGame
     const bg = BrickGame.getInstance(ctx, this.brickSize)
     bg.clearScreen(this.rows, this.cols)
     bg.drawString('score', 2, 2)
-    bg.drawString(this.state.score, 5, 10)
+    bg.drawString(this.state.score.toString(), 5, 10)
   }
 
   private createSnake(): Snake {
@@ -252,7 +253,7 @@ export default class SnakeGame extends React.Component<SnakeGameProps, SnakeGame
   render() {
     return (
       <LabTemplate>
-        <Header headerText="Snake" logoSize="25" />
+        <Header headerText="Snake" logoSize={25} />
         <div className="center-xs">
           <canvas
             ref="canvas"

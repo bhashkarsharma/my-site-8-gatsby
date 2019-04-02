@@ -1,4 +1,4 @@
-import { BrickGame, Point } from '@util'
+import { BrickGame, Point } from '@util/index'
 
 export class Food {
   static readonly SCORE = 10

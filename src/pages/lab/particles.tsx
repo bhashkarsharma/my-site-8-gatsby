@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Header } from '@components'
-import { LabTemplate } from '@templates'
-import { Point, UserEvent, Util } from '@util'
+import { Header } from '@components/header'
+import { LabTemplate } from '@templates/lab'
+import { Point, UserEvent, Util } from '@util/index'
 
 interface Particle extends Point {
   dx: number
@@ -40,13 +40,14 @@ export default class Particles extends React.Component<ParticlesProps, Particles
     size: 100,
     maxDist: 1000
   }
-  private lastEvent: Point
+  private lastEvent: Point | null
   canvas: any
   runningAnim = 0
 
   constructor(props: ParticlesProps) {
     super(props)
     this.canvas = this.refs.canvas
+    this.lastEvent = null
     this.state = { particles: [], count: 50, speed: 1, size: 5, maxDist: 150 }
     this.handleResize = this.handleResize.bind(this)
     this.handleDrag = this.handleDrag.bind(this)
@@ -207,7 +208,7 @@ export default class Particles extends React.Component<ParticlesProps, Particles
   render() {
     return (
       <LabTemplate>
-        <Header headerText="Particles" logoSize="25" />
+        <Header headerText="Particles" logoSize={25} />
         <ParticleBox>
           <canvas
             ref="canvas"
