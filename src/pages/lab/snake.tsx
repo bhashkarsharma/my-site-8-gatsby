@@ -20,9 +20,13 @@ interface SnakeGameState {
 export default class SnakeGame extends React.Component<SnakeGameProps, SnakeGameState> {
   private static readonly DEFAULT_LIVES = 3
   private static readonly DEFAULT_SPEED = 250
+  private static readonly FASTEST_SPEED = 10
+  private static readonly SPEED_STEP = 10
+  private static readonly SCORE_STEP = 20
   private static readonly DEFAULT_RES = 25
   private static readonly MAX_SIZE = 30
   private static readonly MIN_SIZE = 10
+  private static readonly KILL_ANIMATION_DELAY = 60
   private lastEvent: Point | null
   private brickSize = 25
   private rows = 0
@@ -152,7 +156,10 @@ export default class SnakeGame extends React.Component<SnakeGameProps, SnakeGame
 
   private onEat(): void {
     const { score, speed } = this.state
-    const newSpeed = score > 10 && score % 20 === 0 ? speed - 10 : speed
+    const newSpeed =
+      speed > SnakeGame.FASTEST_SPEED && score > 0 && score % SnakeGame.SCORE_STEP === 0
+        ? speed - SnakeGame.SPEED_STEP
+        : speed
     this.setState({ score: score + Food.SCORE, speed: newSpeed })
   }
 
@@ -169,7 +176,13 @@ export default class SnakeGame extends React.Component<SnakeGameProps, SnakeGame
   private drawKillAnimation(callback: Function): void {
     const ctx = this.canvas.getContext('2d')
     const bg = BrickGame.getInstance(ctx, this.brickSize)
-    bg.drawAnimation(BrickAnimationGallery.wipeScreen(this.rows, this.cols, 60), callback, true, this.cols, this.rows)
+    bg.drawAnimation(
+      BrickAnimationGallery.wipeScreen(this.rows, this.cols, SnakeGame.KILL_ANIMATION_DELAY),
+      callback,
+      true,
+      this.cols,
+      this.rows
+    )
   }
 
   private drawEndAnimation(callback?: Function): void {
