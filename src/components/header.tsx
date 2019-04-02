@@ -1,9 +1,9 @@
 import { graphql, Link, StaticQuery } from 'gatsby'
+import Img, { FluidObject } from 'gatsby-image'
 import React from 'react'
 import Helmet from 'react-helmet'
 import styled from 'styled-components'
 import { Logo } from './logo'
-import Img, { FluidObject } from 'gatsby-image'
 import { Menu } from './menu'
 
 interface HeaderProps {

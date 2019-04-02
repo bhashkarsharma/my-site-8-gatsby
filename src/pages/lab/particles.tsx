@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Header } from '~components'
-import { LabTemplate } from '~templates'
-import { Point, UserEvent, Util } from '~util'
+import { Header } from '@components'
+import { LabTemplate } from '@templates'
+import { Point, UserEvent, Util } from '@util'
 
 interface Particle extends Point {
   dx: number

@@ -1,6 +1,6 @@
 import React from 'react'
 import Helmet from 'react-helmet'
-import { Header, Footer, Vinyl } from '~components'
+import { Header, Footer, Vinyl } from '@components'
 
 import '../assets/styles/index.scss'
 

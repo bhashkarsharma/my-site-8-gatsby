@@ -1,7 +1,7 @@
+import { MarkdownRemark, Util } from '@util'
 import { Link } from 'gatsby'
 import React from 'react'
 import styled from 'styled-components'
-import { MarkdownRemark, Util } from '~util'
 import { Tag } from './tag'
 
 interface PostPreviewProps {

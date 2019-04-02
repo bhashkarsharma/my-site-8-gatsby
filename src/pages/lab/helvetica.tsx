@@ -1,6 +1,6 @@
 import React from 'react'
-import { Header } from '~components'
-import { LabTemplate } from '~templates'
+import { Header } from '@components'
+import { LabTemplate } from '@templates'
 import styled from 'styled-components'
 
 const HelveticaBox = styled.div`

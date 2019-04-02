@@ -50,6 +50,7 @@ const FancyText = styled.div`
   font-size: 3vw;
   font-variant: small-caps;
   justify-content: space-between;
+  user-select: none;
   width: 95%;
   z-index: 1;
 `

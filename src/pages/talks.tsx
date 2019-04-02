@@ -1,7 +1,7 @@
 import { graphql } from 'gatsby'
 import React from 'react'
-import { Header } from '~components'
-import { BaseTemplate } from '~templates'
+import { Header } from '@components'
+import { BaseTemplate } from '@templates'
 
 const TalksPage: React.FunctionComponent<any> = ({ data }) => (
   <BaseTemplate>

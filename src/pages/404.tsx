@@ -1,6 +1,6 @@
 import React from 'react'
-import { Header } from '~components'
-import { BaseTemplate } from '~templates'
+import { Header } from '@components'
+import { BaseTemplate } from '@templates'
 
 const NotFoundPage: React.FunctionComponent = () => (
   <BaseTemplate>

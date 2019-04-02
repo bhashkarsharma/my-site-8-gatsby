@@ -1,8 +1,8 @@
 import { graphql } from 'gatsby'
 import React from 'react'
 import styled from 'styled-components'
-import { Header } from '~components'
-import { MarkdownRemark, Util } from '~util'
+import { Header } from '@components'
+import { MarkdownRemark, Util } from '@util'
 import { BaseTemplate } from './base'
 
 const BlogBox = styled.div`

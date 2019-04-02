@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Header } from '~components'
-import { Face } from '~components/lab'
-import { LabTemplate } from '~templates'
+import { Header } from '@components'
+import { Face } from '@components/lab'
+import { LabTemplate } from '@templates'
 
 interface DigilogProps {}
 

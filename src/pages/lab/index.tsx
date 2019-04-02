@@ -1,7 +1,7 @@
 import { graphql, Link } from 'gatsby'
 import React from 'react'
-import { Header } from '~components'
-import { BaseTemplate } from '~templates'
+import { Header } from '@components'
+import { BaseTemplate } from '@templates'
 import styled from 'styled-components'
 
 const LinkBox = styled.span`

@@ -13,8 +13,11 @@
     "emitDecoratorMetadata": true,
     "noEmit": true,
     "skipLibCheck": true,
+    "baseUrl": "./src",
     "paths": {
-      "~components/*": ["src/components/*"]
+      "@components/*": ["./components/*"],
+      "@templates/*": ["./templates/*"],
+      "@util/*": ["./util/*"]
     }
   }
 }
