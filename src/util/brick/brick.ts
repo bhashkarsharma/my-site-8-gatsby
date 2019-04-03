@@ -10,23 +10,14 @@ export class BrickGame {
   private static readonly ARC_B = (Math.PI * 7) / 4
   private context: CanvasRenderingContext2D
   private size: number
-  private static instance: BrickGame
 
-  private constructor(ctx: CanvasRenderingContext2D, size?: number) {
-    BrickGame.instance = this
+  constructor(ctx: CanvasRenderingContext2D, size?: number) {
     this.context = ctx
     this.size = size || BrickGame.SIZE
     this.draw = this.draw.bind(this)
     this.drawEmpty = this.drawEmpty.bind(this)
     this.drawPattern = this.drawPattern.bind(this)
     this.clearScreen = this.clearScreen.bind(this)
-  }
-
-  static getInstance(ctx: CanvasRenderingContext2D, size?: number) {
-    if (!this.instance) {
-      this.instance = new BrickGame(ctx, size)
-    }
-    return this.instance
   }
 
   draw(point: Point): void {
@@ -92,10 +83,10 @@ export class BrickGame {
       .toLowerCase()
       .split('')
       .map((char: string) => {
-        const charPattern = BrickCharMap[char]
-        if (charPattern.length) {
-          const patternWidth = charPattern.reduce((prev: Point, curr: Point) => (prev.x > curr.x ? prev : curr)).x
-          const patternWithOffset: Point[] = charPattern.map((p: Point) => ({ x: p.x + offsetX, y: p.y + startY }))
+        const patternForChar = BrickCharMap[char]
+        if (patternForChar.length) {
+          const patternWidth = patternForChar.reduce((prev: Point, curr: Point) => (prev.x > curr.x ? prev : curr)).x
+          const patternWithOffset: Point[] = patternForChar.map((p: Point) => ({ x: p.x + offsetX, y: p.y + startY }))
           offsetX = offsetX + patternWidth + spacing
           return patternWithOffset
         } else {

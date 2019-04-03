@@ -33,10 +33,12 @@ export default class SnakeGame extends React.Component<SnakeGameProps, SnakeGame
   private cols = 0
   private timeout = 0
   private canvas: any
+  private brickGame: BrickGame | null
 
   constructor(props: SnakeGameProps) {
     super(props)
     this.lastEvent = null
+    this.brickGame = null
     this.canvas = this.refs.canvas
     this.state = {
       started: false,
@@ -66,6 +68,7 @@ export default class SnakeGame extends React.Component<SnakeGameProps, SnakeGame
   }
 
   componentWillUnmount() {
+    this.clearTimer()
     window.removeEventListener('resize', this.handleResize)
     document.removeEventListener('keydown', this.handleKey)
   }
@@ -86,7 +89,7 @@ export default class SnakeGame extends React.Component<SnakeGameProps, SnakeGame
   }
 
   pause(): void {
-    this.setState({ paused: true }, () => clearTimeout(this.timeout))
+    this.setState({ paused: true }, () => this.clearTimer())
   }
 
   play(): void {
@@ -98,15 +101,18 @@ export default class SnakeGame extends React.Component<SnakeGameProps, SnakeGame
     this.drawKillAnimation(() => this.drawEndAnimation())
   }
 
+  private clearTimer(): void {
+    clearTimeout(this.timeout)
+    this.timeout = 0
+  }
+
   private draw(): void {
+    const bg = this.brickGame
     const { snake, foods } = this.state
-    if (this.timeout) clearTimeout(this.timeout)
+    if (this.timeout) this.clearTimer()
 
-    const ctx = this.canvas.getContext('2d')
-    const bg = BrickGame.getInstance(ctx, this.brickSize)
-    bg.clearScreen(this.rows, this.cols)
-
-    if (snake && foods.length) {
+    if (bg && snake && foods.length) {
+      bg.clearScreen(this.rows, this.cols)
       snake.draw(bg)
       snake.move()
 
@@ -134,20 +140,20 @@ export default class SnakeGame extends React.Component<SnakeGameProps, SnakeGame
     if (started && !paused) {
       this.timeout = setTimeout(() => this.draw(), this.state.speed)
     } else {
-      clearTimeout(this.timeout)
+      this.clearTimer()
     }
   }
 
   private static checkCollision(snake: Snake, item: Food & Wall): boolean {
-    const d: any = {}
-    snake.points.forEach((p: Point) => {
-      const dpx = d[p.x] || {}
-      dpx[p.y] = true
-      d[p.x] = dpx
+    const markers: any = {}
+    snake.points.forEach((point: Point) => {
+      const dpx = markers[point.x] || {}
+      dpx[point.y] = true
+      markers[point.x] = dpx
     })
-    for (const p of item.points) {
-      const dpx = d[p.x] || {}
-      if (dpx[p.y]) {
+    for (const point of item.points) {
+      const dpx = markers[point.x] || {}
+      if (dpx[point.y]) {
         return true
       }
     }
@@ -156,10 +162,10 @@ export default class SnakeGame extends React.Component<SnakeGameProps, SnakeGame
 
   private onEat(): void {
     const { score, speed } = this.state
-    const newSpeed =
-      speed > SnakeGame.FASTEST_SPEED && score > 0 && score % SnakeGame.SCORE_STEP === 0
-        ? speed - SnakeGame.SPEED_STEP
-        : speed
+    let newSpeed = speed
+    if (speed > SnakeGame.FASTEST_SPEED && score > 0 && score % SnakeGame.SCORE_STEP === 0) {
+      newSpeed = speed - SnakeGame.SPEED_STEP
+    }
     this.setState({ score: score + Food.SCORE, speed: newSpeed })
   }
 
@@ -174,23 +180,23 @@ export default class SnakeGame extends React.Component<SnakeGameProps, SnakeGame
   }
 
   private drawKillAnimation(callback: Function): void {
-    const ctx = this.canvas.getContext('2d')
-    const bg = BrickGame.getInstance(ctx, this.brickSize)
-    bg.drawAnimation(
-      BrickAnimationGallery.wipeScreen(this.rows, this.cols, SnakeGame.KILL_ANIMATION_DELAY),
-      callback,
-      true,
-      this.cols,
-      this.rows
-    )
+    if (this.brickGame) {
+      this.brickGame.drawAnimation(
+        BrickAnimationGallery.wipeScreen(this.rows, this.cols, SnakeGame.KILL_ANIMATION_DELAY),
+        callback,
+        true,
+        this.cols,
+        this.rows
+      )
+    }
   }
 
   private drawEndAnimation(callback?: Function): void {
-    const ctx = this.canvas.getContext('2d')
-    const bg = BrickGame.getInstance(ctx, this.brickSize)
-    bg.clearScreen(this.rows, this.cols)
-    bg.drawString('score', 2, 2)
-    bg.drawString(this.state.score.toString(), 5, 10)
+    if (this.brickGame) {
+      this.brickGame.clearScreen(this.rows, this.cols)
+      this.brickGame.drawString('score', 2, 2)
+      this.brickGame.drawString(this.state.score.toString(), 5, 10)
+    }
   }
 
   private createSnake(): Snake {
@@ -223,6 +229,8 @@ export default class SnakeGame extends React.Component<SnakeGameProps, SnakeGame
     this.canvas.width = this.cols * this.brickSize
     this.canvas.height = this.rows * this.brickSize
     this.canvas.scrollIntoView()
+
+    this.brickGame = new BrickGame(this.canvas.getContext('2d'), this.brickSize)
   }
 
   handleTouch(e: any): void {
