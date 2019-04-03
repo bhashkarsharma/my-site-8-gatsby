@@ -1,4 +1,3 @@
 export { Face } from './digilog/face'
-export { Food } from './snake/food'
-export { Direction, Snake } from './snake/snake'
+export { SnakeGame } from './snake/snake-game'
 export { Wall } from './snake/wall'
