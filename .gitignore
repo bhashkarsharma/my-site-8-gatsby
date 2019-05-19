@@ -69,4 +69,6 @@ yarn-error.log
 .yarn-integrity
 
 # content
+**/content/json/gallery.json
+**/content/gallery/
 **/content/posts/

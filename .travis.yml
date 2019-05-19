@@ -4,10 +4,15 @@ node_js:
 before_install:
   - COPYLOC=`pwd`
   - echo $COPYLOC
-  - cd ~ && git clone https://github.com/bhashkarsharma/posts && cd posts
+  - cd ~ && git clone https://github.com/bhashkarsharma/content && cd content
   - pwd
-  - mkdir -p $COPYLOC/src/content/posts
-  - cp -r posts/* $COPYLOC/src/content/posts
+  - POSTPATH="$COPYLOC/src/content/posts"
+  - mkdir -p $POSTPATH
+  - cp -r posts/* $POSTPATH
+  - GALLERYPATH="$COPYLOC/src/content/gallery/photos"
+  - mkdir -p $GALLERYPATH
+  - cp -r gallery/photos/* $GALLERYPATH
+  - cp gallery/gallery.json $COPYLOC/src/content/json/gallery.json
   - cd $COPYLOC
 install:
   - pip install --user awscli

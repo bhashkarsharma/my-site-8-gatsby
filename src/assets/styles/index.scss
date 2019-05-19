@@ -90,3 +90,8 @@ p {
     width: 100%;
   }
 }
+
+// override flexboxgrid
+.row {
+  margin: 0;
+}
