@@ -242,9 +242,9 @@ export class SnakeGame extends React.Component<SnakeGameProps, SnakeGameState> {
       const mouseDown = this.lastEvent || { x: 0, y: 0 }
       const swipe = Util.getSwipe(mouseDown, point)
 
-      if (swipe.x) {
+      if (Math.abs(swipe.x) > Math.abs(swipe.y)) {
         this.handleDirection(swipe.x > 0 ? Direction.RIGHT : Direction.LEFT)
-      } else if (swipe.y) {
+      } else if (Math.abs(swipe.y) > Math.abs(swipe.x)) {
         this.handleDirection(swipe.y < 0 ? Direction.UP : Direction.DOWN)
       } else {
         this.state.started ? (this.state.paused ? this.play() : this.pause()) : this.start(true)

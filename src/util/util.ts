@@ -56,19 +56,14 @@ export class Util {
   }
 
   /**
-   * Returns the swipe distance for the axis with higher movement
+   * Returns the swipe distance
    * @param start starting point
    * @param end ending point
    */
   static getSwipe(start: Point, end: Point): Point {
-    const { x: startX, y: startY } = start
-    const { x: endX, y: endY } = end
-    const dx = endX - startX
-    const dy = endY - startY
-    if (Math.abs(dx) > Math.abs(dy)) {
-      return { x: dx, y: 0 }
-    } else {
-      return { x: 0, y: dy }
+    return {
+      x: end.x - start.x,
+      y: end.y - start.y
     }
   }
 

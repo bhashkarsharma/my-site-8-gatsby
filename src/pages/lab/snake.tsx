@@ -1,7 +1,6 @@
 import { Header } from '@components/header'
 import { SnakeGame } from '@components/lab'
 import { LabTemplate } from '@templates/lab'
-import { Link } from 'gatsby'
 import React from 'react'
 
 interface SnakeProps {}
