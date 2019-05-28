@@ -39,7 +39,6 @@ export class SnakeGame extends React.Component<SnakeGameProps, SnakeGameState> {
     super(props)
     this.lastEvent = null
     this.brickGame = null
-    this.canvas = this.refs.canvas
     this.state = {
       started: false,
       paused: false,
