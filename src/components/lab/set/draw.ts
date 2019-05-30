@@ -62,10 +62,10 @@ export class Draw {
   static drawSquiggle(ctx: CanvasRenderingContext2D, start: Point, size: Point, orientation: Orientation): void {
     const startX = start.x + size.x / 2
     const startY = start.y + size.y / 2
-    const rad = Math.min(size.x, size.y) / 2
+    const radius = Math.min(size.x, size.y) / 2
 
     ctx.beginPath()
-    ctx.arc(startX, startY, rad, 0, 2 * Math.PI)
+    ctx.arc(startX, startY, radius, 0, 2 * Math.PI)
     ctx.closePath()
   }
 }
