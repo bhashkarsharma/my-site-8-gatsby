@@ -74,17 +74,11 @@ const HeaderImg = styled(Img)`
 `
 
 export class Header extends React.Component<HeaderProps, HeaderState> {
-  constructor(props: HeaderProps) {
-    super(props)
-
-    this.state = {
-      open: false
-    }
-
-    this.onClick = this.onClick.bind(this)
+  state = {
+    open: false
   }
 
-  onClick(): void {
+  onClick = (): void => {
     const open = !this.state.open
     this.setState({ open })
   }
@@ -140,7 +134,7 @@ export class Header extends React.Component<HeaderProps, HeaderState> {
                   className="col-md-offset-1 col-md-10"
                 >
                   {this.state.open ? (
-                    <Menu items={data.allHeaderJson.edges} />
+                    <Menu items={data.allHeaderJson.edges} multiline={true} />
                   ) : (
                     <>
                       <h1>{this.props.headerText}</h1>

@@ -13,6 +13,11 @@ interface MenuItem {
 
 interface MenuProps {
   items: MenuItem[]
+  multiline: Boolean
+}
+
+interface MenuListProps {
+  multiline: Boolean
 }
 
 const MenuList = styled.ul`
@@ -20,6 +25,16 @@ const MenuList = styled.ul`
   padding: 0;
 
   li {
+    text-align: left;
+    ${({ multiline }: MenuListProps) =>
+      multiline
+        ? `
+    display: block;
+    font-size: 4rem;
+    margin: 1rem 0;
+    text-align: left;
+    `
+        : `
     display: inline-block;
     font-size: 2rem;
     margin-right: 1em;
@@ -27,13 +42,14 @@ const MenuList = styled.ul`
     &:last-child {
       margin: 0;
     }
+    `}
   }
 `
 
-const Menu: React.FunctionComponent<MenuProps> = ({ items }) => (
+const Menu: React.FunctionComponent<MenuProps> = ({ items, multiline }) => (
   <div>
     <nav>
-      <MenuList>
+      <MenuList multiline={multiline}>
         {items.map((item, key) => (
           <li key={key}>
             {item.node.link.startsWith('/') ? (

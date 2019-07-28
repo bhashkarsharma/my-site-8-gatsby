@@ -5,7 +5,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 const LinkBox = styled.span`
-  display: inline-block;
+  display: block;
   font-size: 2em;
   margin: 0.4em;
 `
