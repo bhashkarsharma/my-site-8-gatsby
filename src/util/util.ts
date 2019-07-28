@@ -27,7 +27,7 @@ export class Util {
    * @param str string to compute color
    */
   static getColorForString = (str: string): string => {
-    return this.intToRGB(this.hash(str || ''))
+    return Util.intToRGB(Util.hash(str || ''))
   }
 
   /**
