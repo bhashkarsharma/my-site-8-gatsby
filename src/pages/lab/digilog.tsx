@@ -24,15 +24,11 @@ export default class Digilog extends React.Component<DigilogProps, DigilogState>
   private static readonly TOTAL_MINUTES = 60
   private timer = 0
 
-  constructor(props: DigilogProps) {
-    super(props)
-    this.state = {
-      isDigital: true,
-      time: [0, 0, 0, 0, 0, 0],
-      hours: 0,
-      minutes: 0
-    }
-    this.tick = this.tick.bind(this)
+  state = {
+    isDigital: true,
+    time: [0, 0, 0, 0, 0, 0],
+    hours: 0,
+    minutes: 0
   }
 
   componentDidMount() {
@@ -44,7 +40,7 @@ export default class Digilog extends React.Component<DigilogProps, DigilogState>
     clearInterval(this.timer)
   }
 
-  tick(): void {
+  tick = (): void => {
     const date = new Date()
     if (this.state.isDigital) {
       let time: number[] = []
@@ -68,7 +64,7 @@ export default class Digilog extends React.Component<DigilogProps, DigilogState>
     }
   }
 
-  switchMode(): void {
+  switchMode = (): void => {
     const isDigital = !this.state.isDigital
     this.setState({ isDigital })
   }

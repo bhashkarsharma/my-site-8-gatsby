@@ -10,14 +10,11 @@ interface SnakeState {
 }
 
 export default class Snake extends React.Component<SnakeProps, SnakeState> {
-  constructor(props: SnakeProps) {
-    super(props)
-    this.state = {
-      full: false
-    }
+  state = {
+    full: false
   }
 
-  switchToFull(): void {
+  switchToFull = (): void => {
     this.setState({ full: true })
   }
 

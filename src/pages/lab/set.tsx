@@ -3,20 +3,12 @@ import { SetGame } from '@components/lab'
 import { LabTemplate } from '@templates/lab'
 import React from 'react'
 
-interface SetProps {}
+const Set: React.FunctionComponent = () => (
+  <LabTemplate>
+    <Header headerText="Set" logoSize={25} />
+    <div className="center-xs" />
+    <SetGame />
+  </LabTemplate>
+)
 
-interface SetState {}
-
-export default class Set extends React.Component<SetProps, SetState> {
-  state = {}
-
-  render() {
-    return (
-      <LabTemplate>
-        <Header headerText="Set" logoSize={25} />
-        <div className="center-xs" />
-        <SetGame />
-      </LabTemplate>
-    )
-  }
-}
+export default Set

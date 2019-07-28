@@ -80,12 +80,8 @@ export default class Helvetica extends React.Component<HelveticaProps, Helvetica
   private static readonly ROUND_MINS = 5
   private timer = 0
 
-  constructor(props: HelveticaProps) {
-    super(props)
-    this.state = {
-      blink: Helvetica.ARRANGEMENT.map((i) => Array.from(i).map((_) => false))
-    }
-    this.tick = this.tick.bind(this)
+  state = {
+    blink: Helvetica.ARRANGEMENT.map((i) => Array.from(i).map((_) => false))
   }
 
   componentDidMount() {
@@ -97,17 +93,17 @@ export default class Helvetica extends React.Component<HelveticaProps, Helvetica
     clearInterval(this.timer)
   }
 
-  tick(): void {
+  tick = (): void => {
     this.setState({
       blink: this.getBlinkState(this.getTimeArrayForDate(new Date()))
     })
   }
 
-  private getUsableHours(hours: number): number {
+  private getUsableHours = (hours: number): number => {
     return hours % Helvetica.MAX_HOURS || hours || Helvetica.MAX_HOURS
   }
 
-  private getTimeArrayForDate(date: Date): string[] {
+  private getTimeArrayForDate = (date: Date): string[] => {
     const timeArray = Helvetica.TIME_PREFIX.slice()
     let hours = this.getUsableHours(date.getHours())
     const minutes = date.getMinutes()
@@ -139,7 +135,7 @@ export default class Helvetica extends React.Component<HelveticaProps, Helvetica
     return timeArray.filter((i) => i !== '')
   }
 
-  private getBlinkState(timeArray: string[]): boolean[][] {
+  private getBlinkState = (timeArray: string[]): boolean[][] => {
     const blinkState = Helvetica.ARRANGEMENT.map((i) => Array.from(i).map((_) => false))
     let startX = 0
     let startY = 0

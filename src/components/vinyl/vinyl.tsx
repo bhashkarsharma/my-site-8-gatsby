@@ -68,21 +68,11 @@ export class Vinyl extends React.Component<VinylProps, VinylState> {
   private static readonly NEEDLE_MAX_ANGLE = 55
   private audio: any
 
-  constructor(props: VinylProps) {
-    super(props)
-    this.audio = this.refs.audio
-    this.state = {
-      playing: false,
-      trackName: Vinyl.PLAY_INFO,
-      trackDuration: 0,
-      needleAngle: 0
-    }
-    this.handleDrag = this.handleDrag.bind(this)
-    this.handleDrop = this.handleDrop.bind(this)
-    this.pause = this.pause.bind(this)
-    this.timeChange = this.timeChange.bind(this)
-    this.stop = this.stop.bind(this)
-    this.audioLoaded = this.audioLoaded.bind(this)
+  state = {
+    playing: false,
+    trackName: Vinyl.PLAY_INFO,
+    trackDuration: 0,
+    needleAngle: 0
   }
 
   componentDidMount() {
@@ -90,12 +80,12 @@ export class Vinyl extends React.Component<VinylProps, VinylState> {
     this.audio.addEventListener('error', (e: any) => console.log('error', e))
   }
 
-  handleDrag(e: any): void {
+  handleDrag = (e: any): void => {
     e.stopPropagation()
     e.preventDefault()
   }
 
-  handleDrop(e: any): void {
+  handleDrop = (e: any): void => {
     e.preventDefault()
     const dataTransfer = e.dataTransfer
     if (dataTransfer.items) {
@@ -110,38 +100,38 @@ export class Vinyl extends React.Component<VinylProps, VinylState> {
     }
   }
 
-  private playFile(file: File): void {
+  private playFile = (file: File): void => {
     this.audio.src = URL.createObjectURL(file)
     this.setState({ trackName: file.name })
     this.play()
   }
 
-  private play(): void {
+  private play = (): void => {
     this.audio.addEventListener('loadedmetadata', () => {
       this.audio.play()
       this.setState({ playing: true, trackDuration: this.audio.duration })
     })
   }
 
-  pause(): void {
+  pause = (): void => {
     if (!this.state.trackDuration) return
     this.state.playing ? this.audio.pause() : this.audio.play()
     const playing = !this.state.playing
     this.setState({ playing })
   }
 
-  audioLoaded(e: any): void {
+  audioLoaded = (e: any): void => {
     this.play()
   }
 
-  timeChange(e: any): void {
+  timeChange = (e: any): void => {
     const curr = e.timeStamp / 10
     const percentage = Math.floor(curr / this.state.trackDuration)
     const needleAngle = 5 + (percentage * Vinyl.NEEDLE_MAX_ANGLE) / 100
     this.setState({ needleAngle })
   }
 
-  stop(): void {
+  stop = (): void => {
     this.setState({ playing: false, trackName: Vinyl.PLAY_INFO, needleAngle: 0 })
   }
 

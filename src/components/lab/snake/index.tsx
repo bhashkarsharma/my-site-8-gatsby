@@ -9,7 +9,7 @@ interface SnakeGameProps {}
 interface SnakeGameState {
   started: boolean
   paused: boolean
-  snake?: Snake
+  snake: Snake | null
   foods: Food[]
   wall: Wall[]
   score: number
@@ -27,36 +27,23 @@ export class SnakeGame extends React.Component<SnakeGameProps, SnakeGameState> {
   private static readonly MAX_SIZE = 30
   private static readonly MIN_SIZE = 10
   private static readonly KILL_ANIMATION_DELAY = 60
-  private lastEvent: Point | null
+  private lastEvent: Point | null = null
   private brickSize = 25
   private rows = 0
   private cols = 0
   private timeout = 0
   private canvas: any
-  private brickGame: BrickGame | null
+  private brickGame: BrickGame | null = null
 
-  constructor(props: SnakeGameProps) {
-    super(props)
-    this.lastEvent = null
-    this.brickGame = null
-    this.state = {
-      started: false,
-      paused: false,
-      score: 0,
-      speed: SnakeGame.DEFAULT_SPEED,
-      lives: SnakeGame.DEFAULT_LIVES,
-      snake: undefined,
-      foods: [],
-      wall: []
-    }
-    this.handleResize = this.handleResize.bind(this)
-    this.handleTouch = this.handleTouch.bind(this)
-    this.handleKey = this.handleKey.bind(this)
-    this.start = this.start.bind(this)
-    this.onKill = this.onKill.bind(this)
-    this.play = this.play.bind(this)
-    this.pause = this.pause.bind(this)
-    this.end = this.end.bind(this)
+  state: SnakeGameState = {
+    started: false,
+    paused: false,
+    score: 0,
+    speed: SnakeGame.DEFAULT_SPEED,
+    lives: SnakeGame.DEFAULT_LIVES,
+    snake: null,
+    foods: [],
+    wall: []
   }
 
   componentDidMount() {
@@ -72,7 +59,7 @@ export class SnakeGame extends React.Component<SnakeGameProps, SnakeGameState> {
     document.removeEventListener('keydown', this.handleKey)
   }
 
-  start(reset: boolean): void {
+  start = (reset: boolean): void => {
     const snake = this.createSnake()
     const foods = [this.createFood(snake)]
     let state = {
@@ -87,25 +74,25 @@ export class SnakeGame extends React.Component<SnakeGameProps, SnakeGameState> {
     this.setState(state, () => this.draw())
   }
 
-  pause(): void {
+  pause = (): void => {
     this.setState({ paused: true }, () => this.clearTimer())
   }
 
-  play(): void {
+  play = (): void => {
     this.setState({ paused: false }, () => this.draw())
   }
 
-  end(): void {
+  end = (): void => {
     this.setState({ started: false, paused: false })
     this.drawKillAnimation(() => this.drawEndAnimation())
   }
 
-  private clearTimer(): void {
+  private clearTimer = (): void => {
     clearTimeout(this.timeout)
     this.timeout = 0
   }
 
-  private draw(): void {
+  private draw = (): void => {
     const bg = this.brickGame
     const { snake, foods } = this.state
     if (this.timeout) this.clearTimer()
@@ -143,7 +130,7 @@ export class SnakeGame extends React.Component<SnakeGameProps, SnakeGameState> {
     }
   }
 
-  private static checkCollision(snake: Snake, item: Food & Wall): boolean {
+  private static checkCollision = (snake: Snake, item: Food & Wall): boolean => {
     const markers: any = {}
     snake.points.forEach((point: Point) => {
       const dpx = markers[point.x] || {}
@@ -159,7 +146,7 @@ export class SnakeGame extends React.Component<SnakeGameProps, SnakeGameState> {
     return false
   }
 
-  private onEat(): void {
+  private onEat = (): void => {
     const { score, speed } = this.state
     let newSpeed = speed
     if (speed > SnakeGame.FASTEST_SPEED && score > 0 && score % SnakeGame.SCORE_STEP === 0) {
@@ -168,7 +155,7 @@ export class SnakeGame extends React.Component<SnakeGameProps, SnakeGameState> {
     this.setState({ score: score + Food.SCORE, speed: newSpeed })
   }
 
-  private onKill(): void {
+  private onKill = (): void => {
     const lives = this.state.lives
     if (lives > 1) {
       this.setState({ paused: true, lives: lives - 1 })
@@ -178,7 +165,7 @@ export class SnakeGame extends React.Component<SnakeGameProps, SnakeGameState> {
     }
   }
 
-  private drawKillAnimation(callback: Function): void {
+  private drawKillAnimation = (callback: Function): void => {
     if (this.brickGame) {
       this.brickGame.drawAnimation(
         BrickAnimationGallery.wipeScreen(this.rows, this.cols, SnakeGame.KILL_ANIMATION_DELAY),
@@ -190,7 +177,7 @@ export class SnakeGame extends React.Component<SnakeGameProps, SnakeGameState> {
     }
   }
 
-  private drawEndAnimation(callback?: Function): void {
+  private drawEndAnimation = (callback?: Function): void => {
     if (this.brickGame) {
       this.brickGame.clearScreen(this.rows, this.cols)
       this.brickGame.drawString('score', 2, 2)
@@ -198,7 +185,7 @@ export class SnakeGame extends React.Component<SnakeGameProps, SnakeGameState> {
     }
   }
 
-  private createSnake(): Snake {
+  private createSnake = (): Snake => {
     return new Snake(
       { x: Math.floor(this.cols / 2), y: Math.floor(this.rows / 2) },
       this.rows,
@@ -208,7 +195,7 @@ export class SnakeGame extends React.Component<SnakeGameProps, SnakeGameState> {
     )
   }
 
-  private createFood(snake: Snake): Food {
+  private createFood = (snake: Snake): Food => {
     let food = new Food({ x: Util.getRand(this.cols), y: Util.getRand(this.rows) })
     while (SnakeGame.checkCollision(snake, food)) {
       food = new Food({ x: Util.getRand(this.cols), y: Util.getRand(this.rows) })
@@ -216,7 +203,7 @@ export class SnakeGame extends React.Component<SnakeGameProps, SnakeGameState> {
     return food
   }
 
-  handleResize(): void {
+  handleResize = (): void => {
     this.canvas = this.refs.canvas
     const width = this.canvas.parentElement.clientWidth
     const height = window.innerHeight
@@ -232,7 +219,7 @@ export class SnakeGame extends React.Component<SnakeGameProps, SnakeGameState> {
     this.brickGame = new BrickGame(this.canvas.getContext('2d'), this.brickSize)
   }
 
-  handleTouch(e: any): void {
+  handleTouch = (e: any): void => {
     const { point, event } = Util.normalizeMouseTouchEvents(e)
 
     if (event === UserEvent.START) {
@@ -253,7 +240,7 @@ export class SnakeGame extends React.Component<SnakeGameProps, SnakeGameState> {
     }
   }
 
-  handleKey(e: any): void {
+  handleKey = (e: any): void => {
     const keyMap = new Map<string, Direction>()
     keyMap.set('ArrowUp', Direction.UP)
     keyMap.set('ArrowDown', Direction.DOWN)
@@ -266,8 +253,8 @@ export class SnakeGame extends React.Component<SnakeGameProps, SnakeGameState> {
     }
   }
 
-  handleDirection(direction: Direction): void {
-    this.state.snake ? this.state.snake.move(direction) : ''
+  handleDirection = (direction: Direction): void => {
+    this.state.snake ? this.state.snake.move(direction) : null
   }
 
   render() {
