@@ -338,7 +338,7 @@ export class UI {
   }
 
   /**
-   * Determines the grid dimensions for the provided `deckSize`
+   * Determines the grid dimensions for the provided @param deckSize
    */
   getGridSize = (deckSize: number): Point => {
     const groupSize = DRAW.STEP
@@ -353,7 +353,7 @@ export class UI {
   }
 
   /**
-   * Returns the updated `offset` and `dimensions` after applying the provided `scale`
+   * Returns the updated @param offset and @param dimensions after applying the provided @param scale
    */
   private static getScaledCoords = (offset: Point, dimensions: Point, scale = CARD_SCALE.MIN): Measure => {
     return {

@@ -16,6 +16,7 @@ export class SetGame extends React.Component<SetGameProps, SetGameState> {
   private chosen: number[] = []
   private drawCount = DRAW.MIN
   private ui: UI | null = null
+  private lastEvent: Point | null = null
 
   state = {
     validSets: 0
@@ -57,7 +58,16 @@ export class SetGame extends React.Component<SetGameProps, SetGameState> {
 
   handleTouch = (e: any): void => {
     const { point, event } = Util.normalizeMouseTouchEvents(e)
-    if (event === UserEvent.END) {
+    if (event === UserEvent.START) {
+      this.lastEvent = point
+    } else {
+      // handle rogue touches
+      const mouseDown = this.lastEvent || { x: 0, y: 0 }
+      const { x: swipeX, y: swipeY } = Util.getSwipe(mouseDown, point)
+      if (swipeX > 2 || swipeY > 2) {
+        return
+      }
+
       const canvasBounds = this.canvas.getBoundingClientRect()
       const clickPosition: Point = {
         x: Math.floor(point.x - canvasBounds.left),
@@ -82,6 +92,7 @@ export class SetGame extends React.Component<SetGameProps, SetGameState> {
         this.cardSelectCallback(callbackType, chosen, cardIndex)
       }
       this.setState({ validSets: SetGameUtil.countValidSets(this.hand) })
+      this.lastEvent = null
     }
   }
 
