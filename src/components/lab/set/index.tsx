@@ -1,35 +1,32 @@
-import { Util, Point, UserEvent } from '@util/index'
+import { Point, UserEvent, Util } from '@util/index'
 import React from 'react'
-import { Card } from './card'
+import { Card, DRAW, GameEvent } from './types'
 import { UI } from './ui'
-import { CardUtil } from './util'
+import { SetGameUtil } from './util'
 
 interface SetGameProps {}
 
-interface SetGameState {}
+interface SetGameState {
+  validSets: number
+}
 
 export class SetGame extends React.Component<SetGameProps, SetGameState> {
-  private static readonly DRAW_COUNT = 12
-  private static readonly DRAW_STEP = 3
-
   private canvas: any
   private cards: Card[] = []
   private chosen: number[] = []
-  private drawCount = SetGame.DRAW_COUNT
-  private ui: UI | null
+  private drawCount = DRAW.MIN
+  private ui: UI | null = null
 
-  constructor(props: SetGameProps) {
-    super(props)
-    this.state = {}
-    this.ui = null
+  state = {
+    validSets: 0
+  }
 
-    this.handleResize = this.handleResize.bind(this)
-    this.handleTouch = this.handleTouch.bind(this)
-    this.draw = this.draw.bind(this)
+  get hand(): Card[] {
+    return this.cards.slice(0, this.drawCount)
   }
 
   componentDidMount() {
-    this.cards = CardUtil.shuffle(CardUtil.generateDeck())
+    this.cards = SetGameUtil.initGame(this.drawCount)
     this.handleResize()
     window.addEventListener('resize', this.handleResize)
   }
@@ -38,7 +35,7 @@ export class SetGame extends React.Component<SetGameProps, SetGameState> {
     window.removeEventListener('resize', this.handleResize)
   }
 
-  handleResize(): void {
+  handleResize = (): void => {
     this.canvas = this.refs.canvas
     const width = this.canvas.parentElement.clientWidth
     const height = window.innerHeight
@@ -48,18 +45,17 @@ export class SetGame extends React.Component<SetGameProps, SetGameState> {
 
     const ctx: CanvasRenderingContext2D = this.canvas.getContext('2d')
     this.ui = new UI(ctx, width, height)
-
     this.draw()
+    this.setState({ validSets: SetGameUtil.countValidSets(this.hand) })
   }
 
-  private draw(): void {
+  private draw = (): void => {
     if (this.ui) {
-      this.ui.drawDeck(this.cards.slice(0, this.drawCount), this.chosen)
+      this.ui.drawDeck(this.hand, this.chosen)
     }
-    // requestAnimationFrame(() => this.draw())
   }
 
-  handleTouch(e: any): void {
+  handleTouch = (e: any): void => {
     const { point, event } = Util.normalizeMouseTouchEvents(e)
     if (event === UserEvent.END) {
       const canvasBounds = this.canvas.getBoundingClientRect()
@@ -68,43 +64,86 @@ export class SetGame extends React.Component<SetGameProps, SetGameState> {
         y: Math.floor(point.y - canvasBounds.top)
       }
       if (this.ui) {
-        const cardBounds = this.ui.getCardBounds(this.drawCount)
+        const cardBounds = this.ui.getCardBoxDimensions(this.drawCount)
         const grid = this.ui.getGridSize(this.drawCount)
         const block: Point = {
           x: Math.floor(clickPosition.x / cardBounds.x),
           y: Math.floor(clickPosition.y / cardBounds.y)
         }
         const cardIndex = grid.y * block.x + block.y
-        this.onCardClick(cardIndex)
-        // console.log(grid, this.cards[cardIndex])
+        const { deck, chosen, drawCount, callbackType } = SetGameUtil.selectCardAtIndex(
+          this.cards,
+          this.chosen,
+          cardIndex
+        )
+        this.cards = deck
+        this.chosen = chosen
+        this.drawCount = drawCount
+        this.cardSelectCallback(callbackType, chosen, cardIndex)
       }
+      this.setState({ validSets: SetGameUtil.countValidSets(this.hand) })
     }
   }
 
-  onCardClick(index: number): void {
-    if (this.chosen.includes(index)) {
-      const newChosen = [...this.chosen]
-      newChosen.splice(this.chosen.indexOf(index), 1)
-      this.chosen = newChosen
-    } else {
-      this.chosen = [...this.chosen, index]
-      if (this.chosen.length > 3) {
+  cardSelectCallback = (type: GameEvent, chosen: number[], index: number): void => {
+    switch (type) {
+      case GameEvent.CARD_SELECTED:
+        return this.cardSelectedCallback(index)
+      case GameEvent.CARD_UNSELECTED:
+        return this.cardUnselectedCallback(index)
+      case GameEvent.VALID_SET:
+        return this.cardSelectedCallback(index, () => this.validSetCallback(chosen))
+      case GameEvent.INVALID_SET:
+        return this.cardSelectedCallback(index, () => this.invalidSetCallback(chosen))
+    }
+  }
+
+  validSetCallback = (indices: number[], cb = this.draw): void => {
+    indices.forEach((index: number) => {
+      if (this.ui && index < this.drawCount) {
+        this.ui.drawExitAnimation(this.cards[index], this.drawCount, index, () => {
+          if (this.ui) {
+            this.ui.drawEntryAnimation(this.cards[index], this.drawCount, index, this.draw)
+          }
+        })
+
         this.chosen = []
       }
+    })
+  }
+
+  invalidSetCallback = (indices: number[], cb = this.draw): void => {
+    if (this.ui) {
+      this.ui.drawCardsErrorAnimation(this.cards, this.drawCount, indices, cb)
+      this.chosen = []
     }
-    this.draw()
+  }
+
+  cardSelectedCallback = (index: number, cb = this.draw): void => {
+    if (this.ui && index < this.drawCount) {
+      this.ui.drawCardSelectedAnimation(this.cards[index], this.drawCount, index, cb)
+    }
+  }
+
+  cardUnselectedCallback = (index: number, cb = this.draw): void => {
+    if (this.ui && index < this.drawCount) {
+      this.ui.drawCardUnselectedAnimation(this.cards[index], this.drawCount, index, cb)
+    }
   }
 
   render() {
     return (
-      <canvas
-        ref="canvas"
-        style={{ border: '2px solid', backgroundImage: 'radial-gradient(#00d439, #004009)' }}
-        onMouseDown={this.handleTouch}
-        onMouseUp={this.handleTouch}
-        onTouchStart={this.handleTouch}
-        onTouchEnd={this.handleTouch}
-      />
+      <div>
+        <div>Possible sets: {this.state.validSets}</div>
+        <canvas
+          ref="canvas"
+          style={{ border: '2px solid', backgroundImage: 'radial-gradient(#00d439, #004009)' }}
+          onMouseDown={this.handleTouch}
+          onMouseUp={this.handleTouch}
+          onTouchStart={this.handleTouch}
+          onTouchEnd={this.handleTouch}
+        />
+      </div>
     )
   }
 }

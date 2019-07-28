@@ -3,16 +3,16 @@ import { Orientation } from './types'
 
 export class Draw {
   private static readonly FUNC_MAP: { [shape: string]: Function } = {
-    PILL: Draw.drawPill,
-    DIAMOND: Draw.drawDiamond,
-    SQUIGGLE: Draw.drawSquiggle
+    PILL: Draw.pill,
+    DIAMOND: Draw.diamond,
+    SQUIGGLE: Draw.squiggle
   }
 
   static getFunc(shape: string): Function {
     return Draw.FUNC_MAP[shape]
   }
 
-  static drawRoundedRect(ctx: CanvasRenderingContext2D, start: Point, size: Point, radius = 12): void {
+  static roundedRect(ctx: CanvasRenderingContext2D, start: Point, size: Point, radius = 12): void {
     const { x: startX, y: startY } = start
     const { x: width, y: height } = size
 
@@ -29,7 +29,7 @@ export class Draw {
     ctx.closePath()
   }
 
-  static drawPill(ctx: CanvasRenderingContext2D, start: Point, size: Point, orientation: Orientation): void {
+  static pill(ctx: CanvasRenderingContext2D, start: Point, size: Point, orientation: Orientation): void {
     const { x: startX, y: startY } = start
     const { x: width, y: height } = size
     const radius = orientation === Orientation.LANDSCAPE ? width / 2 : height / 2
@@ -47,7 +47,7 @@ export class Draw {
     ctx.closePath()
   }
 
-  static drawDiamond(ctx: CanvasRenderingContext2D, start: Point, size: Point, orientation: Orientation): void {
+  static diamond(ctx: CanvasRenderingContext2D, start: Point, size: Point, orientation: Orientation): void {
     const startX = orientation === Orientation.LANDSCAPE ? start.x + size.x / 2 : start.x + size.x / 2
     const startY = start.y
 
@@ -59,7 +59,7 @@ export class Draw {
     ctx.closePath()
   }
 
-  static drawSquiggle(ctx: CanvasRenderingContext2D, start: Point, size: Point, orientation: Orientation): void {
+  static squiggle(ctx: CanvasRenderingContext2D, start: Point, size: Point, orientation: Orientation): void {
     const startX = start.x + size.x / 2
     const startY = start.y + size.y / 2
     const radius = Math.min(size.x, size.y) / 2

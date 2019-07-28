@@ -5,11 +5,11 @@ export enum Orientation {
   LANDSCAPE
 }
 
-export interface Game {
-  validSetCallback(indices: number[]): void
-  invalidSetCallback(indices: number[]): void
-  cardSelectedCallback(index: number): void
-  cardUnselectedCallback(index: number): void
+export enum GameEvent {
+  VALID_SET,
+  INVALID_SET,
+  CARD_SELECTED,
+  CARD_UNSELECTED
 }
 
 export interface Measure {

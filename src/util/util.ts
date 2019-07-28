@@ -5,7 +5,7 @@ export class Util {
    * Generate hash for the string
    * @param str input string
    */
-  static hash(str: string): number {
+  static hash = (str: string): number => {
     let hash = 0
     for (let i of Array(str.length).keys()) {
       hash = str.charCodeAt(i) + ((hash << 5) - hash)
@@ -17,7 +17,7 @@ export class Util {
    * Convert an integer to hex color
    * @param n number to be converted
    */
-  static intToRGB(n: number): string {
+  static intToRGB = (n: number): string => {
     const c = (n & 0x00ffffff).toString(16).toUpperCase()
     return n ? '#000000'.substring(0, 7 - c.length) + c : 'var(--color-link)'
   }
@@ -26,7 +26,7 @@ export class Util {
    * Generates a hex color code for given string
    * @param str string to compute color
    */
-  static getColorForString(str: string): string {
+  static getColorForString = (str: string): string => {
     return this.intToRGB(this.hash(str || ''))
   }
 
@@ -35,7 +35,7 @@ export class Util {
    * the given background color based on contrast
    * @param bgColor background color
    */
-  static getLabelColor(bgColor: string): string {
+  static getLabelColor = (bgColor: string): string => {
     if (bgColor.length < 5) {
       bgColor += bgColor.slice(1)
     }
@@ -47,7 +47,7 @@ export class Util {
    * @param min lower range. If max is not provided, will be 0.
    * @param max (optional) upper range. If not provided, min will be used.
    */
-  static getRand(min: number, max?: number): number {
+  static getRand = (min: number, max?: number): number => {
     if (max === undefined) {
       max = min
       min = 0
@@ -60,7 +60,7 @@ export class Util {
    * @param start starting point
    * @param end ending point
    */
-  static getSwipe(start: Point, end: Point): Point {
+  static getSwipe = (start: Point, end: Point): Point => {
     return {
       x: end.x - start.x,
       y: end.y - start.y
@@ -72,7 +72,9 @@ export class Util {
    * the coordinates (relative to the client), and the event type
    * @param event raised by React
    */
-  static normalizeMouseTouchEvents(event: React.MouseEvent & React.TouchEvent): { point: Point; event: UserEvent } {
+  static normalizeMouseTouchEvents = (
+    event: React.MouseEvent & React.TouchEvent
+  ): { point: Point; event: UserEvent } => {
     let eventType = UserEvent.START
     let touch: any = event
     switch (event.type) {
@@ -88,5 +90,20 @@ export class Util {
         break
     }
     return { point: { x: touch.clientX, y: touch.clientY }, event: eventType }
+  }
+
+  private static nextFrame = () => new Promise((resolve) => requestAnimationFrame(resolve))
+
+  static createDelay = async (duration: number) => {
+    const start = performance.now()
+    while (performance.now() - start < duration) {
+      await Util.nextFrame()
+    }
+  }
+
+  static asyncForEach = async (array: any[], callback: Function) => {
+    for (let index = 0; index < array.length; index++) {
+      await callback(array[index], index, array)
+    }
   }
 }
