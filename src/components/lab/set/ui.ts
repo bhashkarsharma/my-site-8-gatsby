@@ -10,7 +10,8 @@ interface ViewConfig {
   callback: Function
 }
 
-interface AnimationConfig extends ViewConfig {
+interface AnimationConfig {
+  vc: ViewConfig
   start: number
   end: number
 }
@@ -85,61 +86,34 @@ export class UI {
     })
   }
 
-  drawEntryAnimation = (config: ViewConfig): void => {
-    const { card, deckSize, index, callback } = config
+  drawEntryAnimation = (vc: ViewConfig): void => {
     const { MIN: start, MAX: end } = CARD_OPACITY
-    this.animateCardOpacity({
-      card,
-      deckSize,
-      index,
-      start,
-      end,
-      callback
-    })
+
+    this.animateCardOpacity({ vc, start, end })
   }
 
-  drawSuccessAnimation = (config: ViewConfig): void => {
-    const { card, deckSize, index, callback } = config
+  drawSuccessAnimation = (vc: ViewConfig): void => {
     const { MIN: end, MAX: start } = CARD_OPACITY
-    this.animateCardOpacity({
-      card,
-      deckSize,
-      index,
-      start,
-      end,
-      callback
-    })
+
+    this.animateCardOpacity({ vc, start, end })
   }
 
   drawHintAnimation = (config: ViewConfig): void => {
     const { card, deckSize, index } = config
+
     this.drawCardSelectedAnimation({ card, deckSize, index, callback: () => this.drawCardUnselectedAnimation(config) })
   }
 
-  drawCardSelectedAnimation = (config: ViewConfig): void => {
-    const { card, deckSize, index, callback } = config
+  drawCardSelectedAnimation = (vc: ViewConfig): void => {
     const { MAX: start, MIN: end } = CARD_SCALE
-    this.animateCardScale({
-      card,
-      deckSize,
-      index,
-      start,
-      end,
-      callback
-    })
+
+    this.animateCardScale({ vc, start, end })
   }
 
-  drawCardUnselectedAnimation = (config: ViewConfig): void => {
-    const { card, deckSize, index, callback } = config
+  drawCardUnselectedAnimation = (vc: ViewConfig): void => {
     const { MIN: start, MAX: end } = CARD_SCALE
-    this.animateCardScale({
-      card,
-      deckSize,
-      index,
-      start,
-      end,
-      callback
-    })
+
+    this.animateCardScale({ vc, start, end })
   }
 
   drawCardsErrorAnimation = (config: {
@@ -152,18 +126,15 @@ export class UI {
     const { MIN: start, MAX: end } = CARD_OFFSET
     indices.forEach((index) => {
       this.animateCardOffset({
-        card: cards[index],
-        deckSize,
-        index,
+        vc: { card: cards[index], deckSize, index, callback },
         start,
-        end,
-        callback
+        end
       })
     })
   }
 
   private animateCardScale = async (config: AnimationConfig) => {
-    const { start, end } = config
+    const { start, end, vc } = config
 
     const step = end > start ? CARD_SCALE.STEP : -CARD_SCALE.STEP
 
@@ -181,14 +152,11 @@ export class UI {
 
     const cap = steplist.map((step) => ({ scale: step } as CardAnimationProps))
 
-    return this.animateCard({
-      vc: config,
-      cap
-    })
+    return this.animateCard({ vc, cap })
   }
 
   private animateCardOpacity = async (config: AnimationConfig) => {
-    const { start, end } = config
+    const { start, end, vc } = config
 
     const step = end > start ? CARD_OPACITY.STEP : -CARD_OPACITY.STEP
 
@@ -206,14 +174,11 @@ export class UI {
 
     const cap = steplist.map((step) => ({ opacity: step } as CardAnimationProps))
 
-    return this.animateCard({
-      vc: config,
-      cap
-    })
+    return this.animateCard({ vc, cap })
   }
 
   private animateCardOffset = async (config: AnimationConfig) => {
-    const { start, end } = config
+    const { start, end, vc } = config
 
     const step = end > start ? CARD_OFFSET.STEP : -CARD_OFFSET.STEP
 
@@ -235,10 +200,7 @@ export class UI {
 
     const cap = animatedSteps.map((step) => ({ offset: { x: step, y: 0 } } as CardAnimationProps))
 
-    return this.animateCard({
-      vc: config,
-      cap
-    })
+    return this.animateCard({ vc, cap })
   }
 
   private animateCard = async (config: { vc: ViewConfig; cap: CardAnimationProps[] }) => {
