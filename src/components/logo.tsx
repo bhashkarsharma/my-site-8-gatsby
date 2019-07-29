@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 interface LogoProps {
   size: number
+  inactive?: Boolean
 }
 
 const LogoBox = styled.div`
@@ -14,14 +15,16 @@ const LogoBox = styled.div`
     border-radius: 50%;
     color: var(--color-white);
     display: inline-block;
-    ${(props: LogoProps) => (props.size ? `padding: ${Math.round(props.size / 50)}em;` : '')}
+    ${({ size }: LogoProps) => (size ? `padding: ${Math.round(size / 50)}em;` : '')}
 
     .logo-content {
       position: relative;
-      ${(props: LogoProps) =>
-        props.size
-          ? `height: ${props.size}px;
-            width: ${props.size}px;`
+      ${({ size }: LogoProps) =>
+        size
+          ? `
+          height: ${size}px;
+          width: ${size}px;
+          `
           : ''}
 
       .letter {
@@ -66,14 +69,18 @@ const LogoBox = styled.div`
     }
   }
 
-  &:hover {
-    transform: rotateZ(180deg);
-    transform-origin: center center;
-  }
+  ${({ inactive }: LogoProps) =>
+    inactive
+      ? ''
+      : `
+    &:hover {
+      transform: rotateZ(180deg);
+      transform-origin: center center;
+    }`}
 `
 
-const Logo: React.FunctionComponent<LogoProps> = (props: LogoProps) => (
-  <LogoBox size={props.size}>
+const Logo: React.FunctionComponent<LogoProps> = ({ size, inactive }: LogoProps) => (
+  <LogoBox size={size} inactive={inactive}>
     <div className="logo-container">
       <div className="logo-content">
         {Array.from(Array(2).keys()).map((i) => (

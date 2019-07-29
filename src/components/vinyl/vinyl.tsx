@@ -152,7 +152,7 @@ export class Vinyl extends React.Component<VinylProps, VinylState> {
               <Record className="texture" discCount={Vinyl.DISC_COUNT} key={i} />
             ))}
             <LogoContainer>
-              <Logo size={50} />
+              <Logo size={50} inactive={true} />
             </LogoContainer>
             <FancyText>
               <div>Bhashkar</div>
