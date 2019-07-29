@@ -3,16 +3,23 @@ import { Draw } from './draw'
 import { Card, DRAW, Measure, Orientation } from './types'
 import { SetGameUtil } from './util'
 
-interface BaseAnimationConfig {
+interface ViewConfig {
   card: Card
   deckSize: number
   index: number
   callback: Function
 }
 
-interface AnimationConfig extends BaseAnimationConfig {
+interface AnimationConfig extends ViewConfig {
   start: number
   end: number
+}
+
+interface CardAnimationProps {
+  scale?: number
+  opacity?: number
+  offset?: Point
+  rotation?: number
 }
 
 const FRAME_DELAY = Math.round(1000 / 40)
@@ -56,7 +63,7 @@ export class UI {
   private shadedFillMap: { [color: string]: CanvasPattern } = {}
 
   private readonly FILL_MAP: { [fill: string]: Function } = {
-    EMPTY: (card: Card) => 'white',
+    EMPTY: (_card: Card) => 'white',
     SHADED: (card: Card) => this.getFillPattern(getColorCode(card.color)),
     SOLID: (card: Card) => getColorCode(card.color)
   }
@@ -78,7 +85,7 @@ export class UI {
     })
   }
 
-  drawEntryAnimation = (config: BaseAnimationConfig): void => {
+  drawEntryAnimation = (config: ViewConfig): void => {
     const { card, deckSize, index, callback } = config
     const { MIN: start, MAX: end } = CARD_OPACITY
     this.animateCardOpacity({
@@ -91,7 +98,7 @@ export class UI {
     })
   }
 
-  drawSuccessAnimation = (config: BaseAnimationConfig): void => {
+  drawSuccessAnimation = (config: ViewConfig): void => {
     const { card, deckSize, index, callback } = config
     const { MIN: end, MAX: start } = CARD_OPACITY
     this.animateCardOpacity({
@@ -104,12 +111,12 @@ export class UI {
     })
   }
 
-  drawHintAnimation = (config: BaseAnimationConfig): void => {
+  drawHintAnimation = (config: ViewConfig): void => {
     const { card, deckSize, index } = config
     this.drawCardSelectedAnimation({ card, deckSize, index, callback: () => this.drawCardUnselectedAnimation(config) })
   }
 
-  drawCardSelectedAnimation = (config: BaseAnimationConfig): void => {
+  drawCardSelectedAnimation = (config: ViewConfig): void => {
     const { card, deckSize, index, callback } = config
     const { MAX: start, MIN: end } = CARD_SCALE
     this.animateCardScale({
@@ -122,7 +129,7 @@ export class UI {
     })
   }
 
-  drawCardUnselectedAnimation = (config: BaseAnimationConfig): void => {
+  drawCardUnselectedAnimation = (config: ViewConfig): void => {
     const { card, deckSize, index, callback } = config
     const { MIN: start, MAX: end } = CARD_SCALE
     this.animateCardScale({
@@ -156,9 +163,7 @@ export class UI {
   }
 
   private animateCardScale = async (config: AnimationConfig) => {
-    const { card, deckSize, index, start, end, callback } = config
-
-    const { offset, dimensions } = this.getCoordinatesForCardAtIndex(deckSize, index)
+    const { start, end } = config
 
     const step = end > start ? CARD_SCALE.STEP : -CARD_SCALE.STEP
 
@@ -174,23 +179,16 @@ export class UI {
     }
     steplist.push(end)
 
-    await Util.asyncForEach(steplist, async (step: number) => {
-      await Util.createDelay(FRAME_DELAY)
+    const cap = steplist.map((step) => ({ scale: step } as CardAnimationProps))
 
-      this.ctx.clearRect(offset.x, offset.y, dimensions.x, dimensions.y)
-
-      this.drawScaledCard({ card, deckSize, index, scale: step })
+    return this.animateCard({
+      vc: config,
+      cap
     })
-
-    callback()
   }
 
   private animateCardOpacity = async (config: AnimationConfig) => {
-    const { ctx } = this
-
-    const { card, deckSize, index, start, end, callback } = config
-
-    const { offset, dimensions } = this.getCoordinatesForCardAtIndex(deckSize, index)
+    const { start, end } = config
 
     const step = end > start ? CARD_OPACITY.STEP : -CARD_OPACITY.STEP
 
@@ -206,28 +204,16 @@ export class UI {
     }
     steplist.push(end)
 
-    await Util.asyncForEach(steplist, async (step: number) => {
-      await Util.createDelay(FRAME_DELAY)
+    const cap = steplist.map((step) => ({ opacity: step } as CardAnimationProps))
 
-      ctx.save()
-
-      ctx.globalAlpha = step
-      ctx.clearRect(offset.x, offset.y, dimensions.x, dimensions.y)
-
-      this.drawScaledCard({ card, deckSize, index })
-
-      ctx.restore()
+    return this.animateCard({
+      vc: config,
+      cap
     })
-
-    callback()
   }
 
   private animateCardOffset = async (config: AnimationConfig) => {
-    const { ctx } = this
-
-    const { card, deckSize, index, start, end, callback } = config
-
-    const { offset, dimensions } = this.getCoordinatesForCardAtIndex(deckSize, index)
+    const { start, end } = config
 
     const step = end > start ? CARD_OFFSET.STEP : -CARD_OFFSET.STEP
 
@@ -247,15 +233,40 @@ export class UI {
     const stepsAndBack = [...steplist, ...reversedSteplist]
     const animatedSteps = [...stepsAndBack, ...stepsAndBack]
 
-    await Util.asyncForEach(animatedSteps, async (step: number) => {
+    const cap = animatedSteps.map((step) => ({ offset: { x: step, y: 0 } } as CardAnimationProps))
+
+    return this.animateCard({
+      vc: config,
+      cap
+    })
+  }
+
+  private animateCard = async (config: { vc: ViewConfig; cap: CardAnimationProps[] }) => {
+    const { ctx } = this
+
+    const { vc, cap } = config
+    const { card, deckSize, index, callback } = vc
+
+    const { offset, dimensions } = this.getCoordinatesForCardAtIndex(deckSize, index)
+
+    await Util.asyncForEach(cap, async (cardAnimationProp: CardAnimationProps) => {
+      const { scale, opacity, offset: cardOffset, rotation } = cardAnimationProp
+
       await Util.createDelay(FRAME_DELAY)
 
       ctx.save()
 
       ctx.clearRect(offset.x, offset.y, dimensions.x, dimensions.y)
-      ctx.translate(step, 0)
 
-      this.drawScaledCard({ card, deckSize, index })
+      if (opacity) {
+        ctx.globalAlpha = opacity
+      }
+
+      if (cardOffset) {
+        ctx.translate(cardOffset.x, cardOffset.y)
+      }
+
+      this.drawScaledCard({ card, deckSize, index, scale, rotation })
 
       ctx.restore()
     })
