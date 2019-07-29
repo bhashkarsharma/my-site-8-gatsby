@@ -3,6 +3,18 @@ import { Draw } from './draw'
 import { Card, DRAW, Measure, Orientation } from './types'
 import { SetGameUtil } from './util'
 
+interface BaseAnimationConfig {
+  card: Card
+  deckSize: number
+  index: number
+  callback: Function
+}
+
+interface AnimationConfig extends BaseAnimationConfig {
+  start: number
+  end: number
+}
+
 const FRAME_DELAY = Math.round(1000 / 40)
 
 const CARD_SCALE: { [key: string]: number } = {
@@ -18,9 +30,9 @@ const CARD_OPACITY: { [key: string]: number } = {
 }
 
 const CARD_OFFSET: { [key: string]: number } = {
-  MIN: -20,
-  MAX: 20,
-  STEP: 4
+  MIN: -10,
+  MAX: 10,
+  STEP: 5
 }
 
 const STRING_NUMS = ['ZERO', 'ONE', 'TWO', 'THREE']
@@ -62,33 +74,43 @@ export class UI {
     this.ctx.clearRect(0, 0, this.width, this.height)
     deck.forEach((card, index) => {
       const scale = chosen.includes(index) ? CARD_SCALE.MIN : CARD_SCALE.MAX
-      this.drawScaledCard(card, deck.length, index, scale)
+      this.drawScaledCard({ card, deckSize: deck.length, index, scale })
     })
   }
 
-  drawEntryAnimation = (card: Card, deckSize: number, index: number, callback: Function): void => {
+  drawEntryAnimation = (config: BaseAnimationConfig): void => {
+    const { card, deckSize, index, callback } = config
+    const { MIN: start, MAX: end } = CARD_OPACITY
     this.animateCardOpacity({
       card,
       deckSize,
       index,
-      start: CARD_OPACITY.MIN,
-      end: CARD_OPACITY.MAX,
+      start,
+      end,
       callback
     })
   }
 
-  drawExitAnimation = (card: Card, deckSize: number, index: number, callback: Function): void => {
+  drawSuccessAnimation = (config: BaseAnimationConfig): void => {
+    const { card, deckSize, index, callback } = config
+    const { MIN: end, MAX: start } = CARD_OPACITY
     this.animateCardOpacity({
       card,
       deckSize,
       index,
-      start: CARD_OPACITY.MAX,
-      end: CARD_OPACITY.MIN,
+      start,
+      end,
       callback
     })
   }
 
-  drawCardSelectedAnimation = (card: Card, deckSize: number, index: number, callback: Function): void => {
+  drawHintAnimation = (config: BaseAnimationConfig): void => {
+    const { card, deckSize, index } = config
+    this.drawCardSelectedAnimation({ card, deckSize, index, callback: () => this.drawCardUnselectedAnimation(config) })
+  }
+
+  drawCardSelectedAnimation = (config: BaseAnimationConfig): void => {
+    const { card, deckSize, index, callback } = config
     const { MAX: start, MIN: end } = CARD_SCALE
     this.animateCardScale({
       card,
@@ -100,7 +122,8 @@ export class UI {
     })
   }
 
-  drawCardUnselectedAnimation = (card: Card, deckSize: number, index: number, callback: Function): void => {
+  drawCardUnselectedAnimation = (config: BaseAnimationConfig): void => {
+    const { card, deckSize, index, callback } = config
     const { MIN: start, MAX: end } = CARD_SCALE
     this.animateCardScale({
       card,
@@ -112,27 +135,27 @@ export class UI {
     })
   }
 
-  drawCardsErrorAnimation = (cards: Card[], deckSize: number, indices: number[], callback: Function): void => {
+  drawCardsErrorAnimation = (config: {
+    cards: Card[]
+    deckSize: number
+    indices: number[]
+    callback: Function
+  }): void => {
+    const { cards, deckSize, indices, callback } = config
+    const { MIN: start, MAX: end } = CARD_OFFSET
     indices.forEach((index) => {
       this.animateCardOffset({
         card: cards[index],
         deckSize,
         index,
-        start: CARD_OFFSET.MIN,
-        end: CARD_OFFSET.MAX,
+        start,
+        end,
         callback
       })
     })
   }
 
-  private animateCardScale = async (config: {
-    card: Card
-    deckSize: number
-    index: number
-    start: number
-    end: number
-    callback: Function
-  }) => {
+  private animateCardScale = async (config: AnimationConfig) => {
     const { card, deckSize, index, start, end, callback } = config
 
     const { offset, dimensions } = this.getCoordinatesForCardAtIndex(deckSize, index)
@@ -156,20 +179,13 @@ export class UI {
 
       this.ctx.clearRect(offset.x, offset.y, dimensions.x, dimensions.y)
 
-      this.drawScaledCard(card, deckSize, index, step)
+      this.drawScaledCard({ card, deckSize, index, scale: step })
     })
 
     callback()
   }
 
-  private animateCardOpacity = async (config: {
-    card: Card
-    deckSize: number
-    index: number
-    start: number
-    end: number
-    callback: Function
-  }) => {
+  private animateCardOpacity = async (config: AnimationConfig) => {
     const { ctx } = this
 
     const { card, deckSize, index, start, end, callback } = config
@@ -194,10 +210,11 @@ export class UI {
       await Util.createDelay(FRAME_DELAY)
 
       ctx.save()
+
       ctx.globalAlpha = step
       ctx.clearRect(offset.x, offset.y, dimensions.x, dimensions.y)
 
-      this.drawScaledCard(card, deckSize, index)
+      this.drawScaledCard({ card, deckSize, index })
 
       ctx.restore()
     })
@@ -205,14 +222,7 @@ export class UI {
     callback()
   }
 
-  private animateCardOffset = async (config: {
-    card: Card
-    deckSize: number
-    index: number
-    start: number
-    end: number
-    callback: Function
-  }) => {
+  private animateCardOffset = async (config: AnimationConfig) => {
     const { ctx } = this
 
     const { card, deckSize, index, start, end, callback } = config
@@ -235,18 +245,19 @@ export class UI {
 
     const reversedSteplist = [...steplist].reverse()
     const stepsAndBack = [...steplist, ...reversedSteplist]
-    const animatedSteps = [...stepsAndBack, ...stepsAndBack, ...stepsAndBack]
+    const animatedSteps = [...stepsAndBack, ...stepsAndBack]
 
     await Util.asyncForEach(animatedSteps, async (step: number) => {
       await Util.createDelay(FRAME_DELAY)
 
-      const shakeOffset: Point = { x: step, y: 0 }
-      const cardOffset = SetGameUtil.modifyPoints(offset, shakeOffset, (a, b) => a + b)
-
-      const { offset: drawOffset, dimensions: drawDimensions } = UI.getScaledCoords(cardOffset, dimensions)
+      ctx.save()
 
       ctx.clearRect(offset.x, offset.y, dimensions.x, dimensions.y)
-      this.drawCard(card, drawOffset, drawDimensions)
+      ctx.translate(step, 0)
+
+      this.drawScaledCard({ card, deckSize, index })
+
+      ctx.restore()
     })
 
     callback()
@@ -255,22 +266,40 @@ export class UI {
   /**
    * Calls `drawCard` after applying scale
    */
-  private drawScaledCard = (card: Card, deckSize: number, index: number, scale = CARD_SCALE.MAX): void => {
+  private drawScaledCard = (config: {
+    card: Card
+    deckSize: number
+    index: number
+    scale?: number
+    rotation?: number
+  }): void => {
+    const { card, deckSize, index, scale, rotation } = config
+
+    const cardScale = scale || CARD_SCALE.MAX
     const { offset: position, dimensions: cardBounds } = this.getCoordinatesForCardAtIndex(deckSize, index)
 
-    const { dimensions, offset } = UI.getScaledCoords(position, cardBounds, scale)
+    const { dimensions, offset } = UI.getScaledCoords(position, cardBounds, cardScale)
 
-    this.drawCard(card, offset, dimensions)
+    this.drawCard({ card, offset, dimensions, rotation })
   }
 
-  private drawCard = (card: Card, position: Point, dimensions: Point): void => {
+  private drawCard = (config: { card: Card; offset: Point; dimensions: Point; rotation?: number }): void => {
+    const { card, offset, dimensions, rotation } = config
     const { ctx } = this
+
+    const cardRotation = rotation || 0
+
+    // move the context so the cards can be rotated about their center
+    const translate: Point = SetGameUtil.modifyPoints(offset, dimensions, (a, b) => a + b / 2)
 
     ctx.save()
 
+    ctx.translate(translate.x, translate.y)
+    ctx.rotate(cardRotation)
+
     ctx.fillStyle = getColorCode('WHITE')
 
-    Draw.roundedRect(ctx, position, dimensions)
+    Draw.roundedRect(ctx, SetGameUtil.modifyPoint(dimensions, (n) => -n / 2), dimensions)
 
     ctx.stroke()
     ctx.fill()
@@ -278,7 +307,9 @@ export class UI {
     ctx.strokeStyle = getColorCode(card.color)
     ctx.lineWidth = 2
 
-    this.drawShapes(card, position, dimensions)
+    ctx.translate(-translate.x, -translate.y)
+
+    this.drawShapes(card, offset, dimensions)
 
     ctx.restore()
   }

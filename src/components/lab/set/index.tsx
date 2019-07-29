@@ -4,10 +4,18 @@ import { Card, DRAW, GameEvent } from './types'
 import { UI } from './ui'
 import { SetGameUtil } from './util'
 
+const MAX_SWIPE_DIST = 4
+
+const BACKGROUND_CHOICES = ['#00d439, #004009', '#ba3221, #540000', '#d4d24f, #6e6c00']
+
+const pad = (num: number): string => `0${num}`.slice(-2)
+
 interface SetGameProps {}
 
 interface SetGameState {
   validSets: number
+  start: number
+  passed: string
 }
 
 export class SetGame extends React.Component<SetGameProps, SetGameState> {
@@ -17,16 +25,24 @@ export class SetGame extends React.Component<SetGameProps, SetGameState> {
   private drawCount = DRAW.MIN
   private ui: UI | null = null
   private lastEvent: Point | null = null
+  private background: string = ''
 
-  state = {
-    validSets: 0
+  state: SetGameState = {
+    validSets: 0,
+    start: 0,
+    passed: ''
   }
 
   get hand(): Card[] {
     return this.cards.slice(0, this.drawCount)
   }
 
+  private getSeconds = () => Math.floor(Date.now() / 1000)
+
   componentDidMount() {
+    this.setState({ start: this.getSeconds() })
+    setInterval(this.timer, 1000)
+    this.background = this._getBackground()
     this.cards = SetGameUtil.initGame(this.drawCount)
     this.handleResize()
     window.addEventListener('resize', this.handleResize)
@@ -34,6 +50,21 @@ export class SetGame extends React.Component<SetGameProps, SetGameState> {
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize)
+  }
+
+  timer = (): void => {
+    const now = this.getSeconds()
+    const elapsed = now - this.state.start
+    const secs = elapsed % 60
+    const elapsedMins = Math.floor(elapsed / 60)
+    const mins = elapsedMins % 60
+    const hrs = Math.floor(elapsedMins / 60)
+    this.setState({ passed: `${pad(hrs)}:${pad(mins)}:${pad(secs)}` })
+  }
+
+  _getBackground = (): string => {
+    const choice = BACKGROUND_CHOICES[Math.floor(BACKGROUND_CHOICES.length * Math.random())]
+    return `radial-gradient(${choice})`
   }
 
   handleResize = (): void => {
@@ -64,7 +95,7 @@ export class SetGame extends React.Component<SetGameProps, SetGameState> {
       // handle rogue touches
       const mouseDown = this.lastEvent || { x: 0, y: 0 }
       const { x: swipeX, y: swipeY } = Util.getSwipe(mouseDown, point)
-      if (swipeX > 2 || swipeY > 2) {
+      if (swipeX > MAX_SWIPE_DIST || swipeY > MAX_SWIPE_DIST) {
         return
       }
 
@@ -111,11 +142,23 @@ export class SetGame extends React.Component<SetGameProps, SetGameState> {
 
   validSetCallback = (indices: number[], cb = this.draw): void => {
     indices.forEach((index: number) => {
+      const callback = () => {
+        if (this.ui) {
+          this.ui.drawEntryAnimation({
+            card: this.cards[index],
+            deckSize: this.drawCount,
+            index,
+            callback: this.draw
+          })
+        }
+      }
+
       if (this.ui && index < this.drawCount) {
-        this.ui.drawExitAnimation(this.cards[index], this.drawCount, index, () => {
-          if (this.ui) {
-            this.ui.drawEntryAnimation(this.cards[index], this.drawCount, index, this.draw)
-          }
+        this.ui.drawSuccessAnimation({
+          card: this.cards[index],
+          deckSize: this.drawCount,
+          index,
+          callback
         })
 
         this.chosen = []
@@ -123,32 +166,57 @@ export class SetGame extends React.Component<SetGameProps, SetGameState> {
     })
   }
 
-  invalidSetCallback = (indices: number[], cb = this.draw): void => {
+  invalidSetCallback = (indices: number[], callback = this.draw): void => {
     if (this.ui) {
-      this.ui.drawCardsErrorAnimation(this.cards, this.drawCount, indices, cb)
+      this.ui.drawCardsErrorAnimation({ cards: this.cards, deckSize: this.drawCount, indices, callback })
+
       this.chosen = []
     }
   }
 
-  cardSelectedCallback = (index: number, cb = this.draw): void => {
+  cardSelectedCallback = (index: number, callback = this.draw): void => {
     if (this.ui && index < this.drawCount) {
-      this.ui.drawCardSelectedAnimation(this.cards[index], this.drawCount, index, cb)
+      this.ui.drawCardSelectedAnimation({ card: this.cards[index], deckSize: this.drawCount, index, callback })
     }
   }
 
-  cardUnselectedCallback = (index: number, cb = this.draw): void => {
+  cardUnselectedCallback = (index: number, callback = this.draw): void => {
     if (this.ui && index < this.drawCount) {
-      this.ui.drawCardUnselectedAnimation(this.cards[index], this.drawCount, index, cb)
+      this.ui.drawCardUnselectedAnimation({ card: this.cards[index], deckSize: this.drawCount, index, callback })
+    }
+  }
+
+  shuffleHand = (): void => {
+    this.cards = SetGameUtil.shuffle(this.cards, this.drawCount)
+    this.chosen = []
+    this.draw()
+  }
+
+  showHint = (): void => {
+    const hints = SetGameUtil.getValidSets(this.hand)
+    if (hints.length) {
+      const hint = hints[0]
+      hint.forEach((index) => {
+        if (this.ui) {
+          this.ui.drawHintAnimation({ card: this.cards[index], deckSize: this.drawCount, index, callback: this.draw })
+        }
+      })
     }
   }
 
   render() {
+    const { validSets, passed } = this.state
     return (
       <div>
-        <div>Possible sets: {this.state.validSets}</div>
+        <div>Possible sets: {validSets}</div>
+        <div>Remaining cards: {this.cards.length}</div>
+        <div>Time: {passed}</div>
+        <div>Score:</div>
+        <button onClick={this.showHint}>Hint</button>
+        <button onClick={this.shuffleHand}>Shuffle</button>
         <canvas
           ref="canvas"
-          style={{ border: '2px solid', backgroundImage: 'radial-gradient(#00d439, #004009)' }}
+          style={{ border: '2px solid', backgroundImage: this.background }}
           onMouseDown={this.handleTouch}
           onMouseUp={this.handleTouch}
           onTouchStart={this.handleTouch}
