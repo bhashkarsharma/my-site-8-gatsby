@@ -4,6 +4,16 @@ import { Header } from '@components/header'
 import { LabTemplate } from '@templates/lab'
 import { Point, UserEvent, Util } from '@util/index'
 
+const MIN_SWIPE_LENGTH = 25
+const SWIPE_AREA_WIDTH = 200
+const COLOR = 'rgb(0,0,0)'
+const LIMITS: ParticlesParams = {
+  count: 200,
+  speed: 100,
+  size: 100,
+  maxDist: 1000
+}
+
 interface Particle extends Point {
   dx: number
   dy: number
@@ -31,15 +41,6 @@ const ParticleBox = styled.div`
 `
 
 export default class Particles extends React.Component<ParticlesProps, ParticlesState> {
-  private static readonly MIN_SWIPE_LENGTH = 25
-  private static readonly SWIPE_AREA_WIDTH = 200
-  private static readonly COLOR = 'rgb(0,0,0)'
-  private static readonly LIMITS: ParticlesParams = {
-    count: 200,
-    speed: 100,
-    size: 100,
-    maxDist: 1000
-  }
   private lastEvent: Point | null = null
   canvas: any
   runningAnim = 0
@@ -90,7 +91,7 @@ export default class Particles extends React.Component<ParticlesProps, Particles
   }
 
   private drawParticle = (ctx: CanvasRenderingContext2D, particle: Particle): void => {
-    ctx.fillStyle = Particles.COLOR
+    ctx.fillStyle = COLOR
     ctx.beginPath()
     ctx.arc(particle.x, particle.y, this.state.size, 0, Math.PI * 2)
     ctx.fill()
@@ -117,7 +118,7 @@ export default class Particles extends React.Component<ParticlesProps, Particles
   }
 
   private drawConnection = (ctx: CanvasRenderingContext2D, thickness: number, a: Particle, b: Particle): void => {
-    ctx.strokeStyle = Particles.COLOR
+    ctx.strokeStyle = COLOR
     ctx.lineWidth = thickness
     ctx.beginPath()
     ctx.moveTo(a.x, a.y)
@@ -183,21 +184,21 @@ export default class Particles extends React.Component<ParticlesProps, Particles
     let percentage = 0.1
     let stageDelta: any = {}
 
-    if (Math.abs(swipe.x) > Particles.MIN_SWIPE_LENGTH) {
+    if (Math.abs(swipe.x) > MIN_SWIPE_LENGTH) {
       percentage = Math.abs(swipe.x / can.width) || percentage
 
-      if (start.y < Particles.SWIPE_AREA_WIDTH) {
-        stageDelta = { count: Math.ceil(Particles.LIMITS.count * percentage) }
-      } else if (start.y > can.height - Particles.SWIPE_AREA_WIDTH) {
-        stageDelta = { maxDist: Math.ceil(Particles.LIMITS.maxDist * percentage) }
+      if (start.y < SWIPE_AREA_WIDTH) {
+        stageDelta = { count: Math.ceil(LIMITS.count * percentage) }
+      } else if (start.y > can.height - SWIPE_AREA_WIDTH) {
+        stageDelta = { maxDist: Math.ceil(LIMITS.maxDist * percentage) }
       }
-    } else if (Math.abs(swipe.y) > Particles.MIN_SWIPE_LENGTH) {
+    } else if (Math.abs(swipe.y) > MIN_SWIPE_LENGTH) {
       percentage = Math.abs(swipe.y / can.height) || percentage
 
-      if (start.x < Particles.SWIPE_AREA_WIDTH) {
-        stageDelta = { speed: Math.ceil(Particles.LIMITS.speed * percentage) }
-      } else if (start.x > can.width - Particles.SWIPE_AREA_WIDTH) {
-        stageDelta = { size: Math.ceil(Particles.LIMITS.size * percentage) }
+      if (start.x < SWIPE_AREA_WIDTH) {
+        stageDelta = { speed: Math.ceil(LIMITS.speed * percentage) }
+      } else if (start.x > can.width - SWIPE_AREA_WIDTH) {
+        stageDelta = { size: Math.ceil(LIMITS.size * percentage) }
       }
     }
     if (Object.entries(stageDelta).length) {

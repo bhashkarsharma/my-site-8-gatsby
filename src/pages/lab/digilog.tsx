@@ -4,6 +4,9 @@ import { LabTemplate } from '@templates/lab'
 import React from 'react'
 import styled from 'styled-components'
 
+const ANGLE_OFFSET = 90
+const TOTAL_MINUTES = 60
+
 interface DigilogProps {}
 
 interface DigilogState {
@@ -20,8 +23,6 @@ const DigilogBox = styled.div`
 `
 
 export default class Digilog extends React.Component<DigilogProps, DigilogState> {
-  private static readonly ANGLE_OFFSET = 90
-  private static readonly TOTAL_MINUTES = 60
   private timer = 0
 
   state = {
@@ -58,8 +59,8 @@ export default class Digilog extends React.Component<DigilogProps, DigilogState>
     } else {
       const h = date.getHours()
       const m = date.getMinutes()
-      const hours = 0.5 * (Digilog.TOTAL_MINUTES * h + m) - Digilog.ANGLE_OFFSET
-      const minutes = 6 * m - Digilog.ANGLE_OFFSET
+      const hours = 0.5 * (TOTAL_MINUTES * h + m) - ANGLE_OFFSET
+      const minutes = 6 * m - ANGLE_OFFSET
       this.setState({ hours, minutes })
     }
   }
