@@ -17,7 +17,6 @@ before_install:
 install:
   - pip install --user awscli
   - npm install
-  - npm audit fix
 script: npm run build
 deploy:
   provider: s3
